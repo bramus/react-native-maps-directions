@@ -37,7 +37,7 @@ Its properties are:
 Coordinates can be objects with `latitude` and `longitude` keys, or a string in the format `'latitude,longitude'`.
 
 ```js
-<MapViewDirections origin={latitude: 37.798790, longitude: -122.442753} … />
+<MapViewDirections origin={{latitude: 37.798790, longitude: -122.442753}} … />
 <MapViewDirections origin="37.798790,-122.442753" … />
 ```
 
