@@ -24,11 +24,29 @@ Its properties are:
 
 ```js
 <MapView initialRegion={…}>
-	<MapViewDirections origin={origin} destination={destination} apikey={GOOGLE_MAPS_APIKEY} />
+	<MapViewDirections
+		origin={origin}
+		destination={destination}
+		apikey={GOOGLE_MAPS_APIKEY}
+	/>
 </MapView>
 ```
 
-Coordinates can be objects with `latitude` and `longitude` keys, or a string in the format `'latitude,longitude'`
+Coordinates can be objects with `latitude` and `longitude` keys, or a string in the format `'latitude,longitude'`.
+
+Once the directions from both coordinates has been fetched, a `MapView.Polyline` between the two will be drawn. Therefore all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted.
+
+```js
+<MapView initialRegion={…}>
+	<MapViewDirections
+		origin={origin}
+		destination={destination}
+		apikey={GOOGLE_MAPS_APIKEY}
+		strokeWidth={3}
+		strokeColor="hotpink"
+	/>
+</MapView>
+```
 
 ## Full Example
 
