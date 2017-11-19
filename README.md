@@ -1,0 +1,91 @@
+# `react-native-maps-directions` [![npm version](https://img.shields.io/npm/v/react-native-maps-directions.svg?style=flat)](https://www.npmjs.com/package/react-native-maps-directions)
+
+Directions component for [`react-native-maps`](https://github.com/airbnb/react-native-maps/)
+
+## Installation
+
+```
+yarn add react-native-maps-directions
+```
+
+## Prerequisites
+
+Google Maps is used for the routing. Therefore [a Google Maps API Key](https://developers.google.com/maps/documentation/ios-sdk/get-api-key) is required.
+
+## Usage
+
+Import `MapViewDirections` and render an instance as a child of a `MapView` component.
+
+Its properties are:
+
+- `origin`: The origin coordinate
+- `destination`: The destination coordinate
+- `apikey`: Your Google Maps API Key
+
+```js
+<MapView initialRegion={…}>
+	<MapViewDirections origin={origin} destination={destination} apikey={GOOGLE_MAPS_APIKEY} />
+</MapView>
+```
+
+Coordinates can be objects with `latitude` and `longitude` keys, or a string in the format `'latitude,longitude'`
+
+## Full Example
+
+```js
+import React, { Component } from 'react';
+import MapView from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
+
+const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+const LATITUDE = 37.78825;
+const LONGITUDE = -122.4324;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+const coordinates = [
+	{
+		latitude: 37.798790,
+		longitude: -122.442753,
+	},
+	{
+		latitude: 37.801232,
+		longitude: -122.424728,
+	},
+];
+
+const GOOGLE_MAPS_APIKEY = '…';
+
+class Example extends Component {
+	render() {
+		return (
+			<MapView
+				initialRegion={{
+					latitude: LATITUDE,
+					longitude: LONGITUDE,
+					latitudeDelta: LATITUDE_DELTA,
+					longitudeDelta: LONGITUDE_DELTA,
+				}}
+			>
+				<MapView.Marker coordinate={coordinates[0]} />
+				<MapView.Marker coordinate={coordinates[1]} />
+				<MapViewDirections origin={coordinates[0]} destination={coordinates[1]} apikey={GOOGLE_MAPS_APIKEY} />
+			</MapView>
+		);
+	}
+}
+```
+
+## Changelog
+
+Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+
+## Credits
+
+- Bram(us) Van Damme <em>([https://www.bram.us/](https://www.bram.us/))</em>
+- [All Contributors](../../contributors)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

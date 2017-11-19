@@ -1,0 +1,35 @@
+{
+  "name": "react-native-maps-directions",
+  "version": "1.0.0",
+  "description": "Directions Component for react-native-maps",
+  "main": "index.js",
+  "author": {
+    "name": "Bramus!",
+    "email": "bramus@bram.us",
+    "url": "https://www.bram.us/"
+  },
+  "repository": "https://github.com/bramus/react-native-maps-directions",
+  "keywords": [
+    "react-native",
+    "react-native-component",
+    "react-native-maps",
+    "directions",
+    "google-maps",
+    "ios",
+    "android"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bramus/react-native-maps-directions/issues"
+  },
+  "homepage": "https://github.com/bramus/react-native-maps-directions",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-maps": ">=0.12.1"
+  },
+  "private": false,
+  "dependencies": {
+    "prop-types": "^15.6.0"
+  }
+}
