@@ -1,6 +1,8 @@
 # `react-native-maps-directions` [![npm version](https://img.shields.io/npm/v/react-native-maps-directions.svg?style=flat)](https://www.npmjs.com/package/react-native-maps-directions)
 
-Directions component for [`react-native-maps`](https://github.com/airbnb/react-native-maps/)
+Directions component for [`react-native-maps`](https://github.com/airbnb/react-native-maps/) – Draw a route between two coordinates.
+
+![react-native-maps-directions](https://user-images.githubusercontent.com/213073/32996694-45607e9e-cd86-11e7-9cb1-a5584fffeed9.png)
 
 ## Installation
 
@@ -34,7 +36,12 @@ Its properties are:
 
 Coordinates can be objects with `latitude` and `longitude` keys, or a string in the format `'latitude,longitude'`.
 
-Once the directions from both coordinates has been fetched, a `MapView.Polyline` between the two will be drawn. Therefore all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted.
+```js
+<MapViewDirections origin={latitude: 37.798790, longitude: -122.442753} … />
+<MapViewDirections origin="37.798790,-122.442753" … />
+```
+
+Once the directions in between both coordinates has been fetched, a `MapView.Polyline` between the two will be drawn. Therefore all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted.
 
 ```js
 <MapView initialRegion={…}>
