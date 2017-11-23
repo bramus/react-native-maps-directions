@@ -68,15 +68,15 @@ class MapViewDirections extends Component {
 		}
 
 		this.fetchRoute(origin, destination, apikey)
-		.then(result => {
-			this.setState(result);
-			onReady && onReady(result);
-		})
-		.catch(errorMessage => {
-			this.resetState();
-			console.warn(`MapViewDirections Error: ${errorMessage}`);
-			onError && onError(errorMessage);
-		});
+			.then(result => {
+				this.setState(result);
+				onReady && onReady(result);
+			})
+			.catch(errorMessage => {
+				this.resetState();
+				console.warn(`MapViewDirections Error: ${errorMessage}`); // eslint-disable-line no-console
+				onError && onError(errorMessage);
+			});
 	}
 
 	fetchRoute = (origin, destination, apikey) => {
@@ -88,7 +88,8 @@ class MapViewDirections extends Component {
 			.then(json => {
 
 				if (json.status !== 'OK') {
-					return Promise.reject(json.error_message || 'Unknown error');
+					const errorMessage = json.error_message || 'Unknown error';
+					return Promise.reject(errorMessage);
 				}
 
 				if (json.routes.length) {
@@ -117,15 +118,17 @@ class MapViewDirections extends Component {
 		}
 
 		const {
-			origin,
-			destination,
-			apikey,
-			onReady,
-			onError,
+			origin, // eslint-disable-line no-unused-vars
+			destination, // eslint-disable-line no-unused-vars
+			apikey, // eslint-disable-line no-unused-vars
+			onReady, // eslint-disable-line no-unused-vars
+			onError, // eslint-disable-line no-unused-vars
 			...props
 		} = this.props;
 
-		return <MapView.Polyline coordinates={this.state.coordinates} {...props} />;
+		return (
+			<MapView.Polyline coordinates={this.state.coordinates} {...props} />
+		);
 	}
 
 }
