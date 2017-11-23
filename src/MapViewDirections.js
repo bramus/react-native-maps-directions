@@ -69,9 +69,9 @@ class MapViewDirections extends Component {
 		.then(result => {
 			this.setState(result);
 		})
-		.catch(e => {
+		.catch(errorMessage => {
 			this.resetState();
-			console.warn(e);
+			console.warn(`MapViewDirections Error: ${errorMessage}`);
 		});
 	}
 
@@ -82,6 +82,11 @@ class MapViewDirections extends Component {
 		return fetch(url)
 			.then(response => response.json())
 			.then(json => {
+
+				if (json.status !== 'OK') {
+					return Promise.reject(json.error_message || 'Unknown error');
+				}
+
 				if (json.routes.length) {
 
 					const route = json.routes[0];
