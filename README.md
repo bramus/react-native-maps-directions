@@ -1,8 +1,8 @@
 # `react-native-maps-directions` [![npm version](https://img.shields.io/npm/v/react-native-maps-directions.svg?style=flat)](https://www.npmjs.com/package/react-native-maps-directions)
 
-Directions component for [`react-native-maps`](https://github.com/airbnb/react-native-maps/) – Draw a route between two coordinates.
+Directions component for [`react-native-maps`](https://github.com/airbnb/react-native-maps/) – Draw a route between two coordinates, powered by the Google Maps Directions API
 
-![react-native-maps-directions](https://user-images.githubusercontent.com/213073/32996694-45607e9e-cd86-11e7-9cb1-a5584fffeed9.png)
+![react-native-maps-directions](https://user-images.githubusercontent.com/213073/33188062-efc86e24-d096-11e7-87eb-6925291bc809.png)
 
 ## Installation
 
@@ -10,21 +10,21 @@ Directions component for [`react-native-maps`](https://github.com/airbnb/react-n
 yarn add react-native-maps-directions
 ```
 
-## Prerequisites
+## Basic Usage
 
-The Google Maps Directions API is used for the routing. Therefore [a Google Maps API Key](https://developers.google.com/maps/documentation/directions/get-api-key) is required.
+Import `MapViewDirections` and render it as a child of a `MapView` component. The mandatory `MapViewDirections` props are:
 
-## Usage
-
-Import `MapViewDirections` and render an instance as a child of a `MapView` component.
-
-Its properties are:
-
-- `origin`: The origin coordinate
-- `destination`: The destination coordinate
-- `apikey`: Your Google Maps API Key
+- `origin`: The coordinate of the origin location
+- `destination`: The coordinate of the destination location
+- `apikey`: Your Google Maps API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key))_.
 
 ```js
+import MapViewDirections from 'react-native-maps-directions';
+
+const origin = {latitude: 37.3318456, longitude: -122.0296002};
+const destination = {latitude: 37.771707, longitude: -122.4053769};
+const GOOGLE_MAPS_APIKEY = '…';
+
 <MapView initialRegion={…}>
   <MapViewDirections
     origin={origin}
@@ -34,14 +34,7 @@ Its properties are:
 </MapView>
 ```
 
-Coordinates can be objects with `latitude` and `longitude` keys, or a string in the format `'latitude,longitude'`.
-
-```js
-<MapViewDirections origin={{latitude: 37.798790, longitude: -122.442753}} … />
-<MapViewDirections origin="37.798790,-122.442753" … />
-```
-
-Once the directions in between both coordinates has been fetched, a `MapView.Polyline` between the two will be drawn. Therefore all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted.
+Once the directions in between both coordinates has been fetched, a `MapView.Polyline` between the two will be drawn. Since the result rendered on screen is a `MapView.Polyline` component, all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted:
 
 ```js
 <MapView initialRegion={…}>
@@ -55,7 +48,38 @@ Once the directions in between both coordinates has been fetched, a `MapView.Pol
 </MapView>
 ```
 
-## Full Example
+## A note on coordinates
+
+Coordinates can be objects with `latitude` and `longitude` keys, or a string in the format `'latitude,longitude'`.
+
+```js
+<MapViewDirections origin={{latitude: 37.3318456, longitude: -122.0296002}} … />
+<MapViewDirections origin="37.3318456,-122.0296002" … />
+```
+
+## Component API
+
+### Props
+
+| Prop | Type | Note |
+|---|---|---|
+| `origin` | `LatLng` or `String` | The coordinate of the origin location
+| `destination` | `LatLng` or `String` | The coordinate of the destination location
+| `apikey` | `String` | Your Google Maps API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key))_.
+
+Since the result rendered on screen is a `MapView.Polyline` component, all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted.
+
+### Events/Callbacks
+
+| Event Name | Returns | Notes
+|---|---|---|
+| `onReady` | `{ distance: Number, duration: Number, coordinates: [] }` | Callback that is called when the routing has been calculated.
+| `onError` | `errorMessage` | Callback that is called when the routing has failed.
+
+
+## Extended Example
+
+This example will draw a route between AirBnB's Office and Apple's HQ
 
 ```js
 import React, { Component } from 'react';
@@ -65,25 +89,52 @@ import MapViewDirections from 'react-native-maps-directions';
 
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
-const LATITUDE = 37.78825;
-const LONGITUDE = -122.4324;
+const LATITUDE = 37.771707;
+const LONGITUDE = -122.4053769;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-
-const coordinates = [
-  {
-    latitude: 37.798790,
-    longitude: -122.442753,
-  },
-  {
-    latitude: 37.790651,
-    longitude: -122.422497,
-  },
-];
 
 const GOOGLE_MAPS_APIKEY = '…';
 
 class Example extends Component {
+
+  constructor(props) {
+    super(props);
+
+    // AirBnB's Office, and Apple Park
+    this.state = {
+      coordinates: [
+        {
+          latitude: 37.3317876,
+          longitude: -122.0054812,
+        },
+        {
+          latitude: 37.771707,
+          longitude: -122.4053769,
+        },
+      ],
+    };
+
+    this.mapView = null;
+  }
+
+  onMapPress = (e) => {
+    if (this.state.coordinates.length == 2) {
+      this.setState({
+        coordinates: [
+          e.nativeEvent.coordinate,
+        ],
+      });
+    } else {
+      this.setState({
+        coordinates: [
+          ...this.state.coordinates,
+          e.nativeEvent.coordinate,
+        ],
+      });
+    }
+  }
+
   render() {
     return (
       <MapView
@@ -94,10 +145,34 @@ class Example extends Component {
           longitudeDelta: LONGITUDE_DELTA,
         }}
         style={StyleSheet.absoluteFill}
+        ref={c => this.mapView = c}
+        onPress={this.onMapPress}
       >
-        <MapView.Marker coordinate={coordinates[0]} />
-        <MapView.Marker coordinate={coordinates[1]} />
-        <MapViewDirections origin={coordinates[0]} destination={coordinates[1]} apikey={GOOGLE_MAPS_APIKEY} strokeWidth={3} strokeColor="hotpink" />
+        {this.state.coordinates.map((coordinate, index) =>
+          <MapView.Marker key={`coordinate_${index}`} coordinate={coordinate} />
+        )}
+        {(this.state.coordinates.length === 2) && (
+          <MapViewDirections
+            origin={this.state.coordinates[0]}
+            destination={this.state.coordinates[1]}
+            apikey={GOOGLE_MAPS_APIKEY}
+            strokeWidth={3}
+            strokeColor="hotpink"
+            onReady={(result) => {
+              this.mapView.fitToCoordinates(result.coordinates, {
+                edgePadding: {
+                  right: (width / 20),
+                  bottom: (height / 20),
+                  left: (width / 20),
+                  top: (height / 20),
+                }
+              });
+            }}
+            onError={(errorMessage) => {
+              // console.log('GOT AN ERROR');
+            }}
+          />
+        )}
       </MapView>
     );
   }
