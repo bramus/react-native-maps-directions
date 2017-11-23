@@ -55,6 +55,8 @@ class MapViewDirections extends Component {
 			origin,
 			destination,
 			apikey,
+			onReady,
+			onError,
 		} = this.props;
 
 		if (origin.latitude && origin.longitude) {
@@ -68,10 +70,12 @@ class MapViewDirections extends Component {
 		this.fetchRoute(origin, destination, apikey)
 		.then(result => {
 			this.setState(result);
+			onReady && onReady(result);
 		})
 		.catch(errorMessage => {
 			this.resetState();
 			console.warn(`MapViewDirections Error: ${errorMessage}`);
+			onError && onError(errorMessage);
 		});
 	}
 
@@ -116,6 +120,8 @@ class MapViewDirections extends Component {
 			origin,
 			destination,
 			apikey,
+			onReady,
+			onError,
 			...props
 		} = this.props;
 
@@ -140,6 +146,8 @@ MapViewDirections.propTypes = {
 		}),
 	]),
 	apikey: PropTypes.string.isRequired,
+	onReady: PropTypes.func,
+	onError: PropTypes.func,
 };
 
 export default MapViewDirections;
