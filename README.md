@@ -190,7 +190,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed re
 - Bram(us) Van Damme <em>([https://www.bram.us/](https://www.bram.us/))</em>
 - [All Contributors](../../contributors)
 
-This code is inspired upon the article [React Native Maps with Google Directions Api](https://medium.com/@ali_oguzhan/react-native-maps-with-google-directions-api-bc716ed7a366) by Ali Oğuzhan Yıldız.
+This code is inspired upon the article [React Native Maps with Google Directions Api](https://medium.com/@ali_oguzhan/react-native-maps-with-google-directions-api-bc716ed7a366) by [Ali Oğuzhan Yıldız](https://github.com/alioguzhan).
 
 ## License
 
