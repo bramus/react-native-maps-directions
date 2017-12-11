@@ -30,9 +30,12 @@ const GOOGLE_MAPS_APIKEY = '…';
     origin={origin}
     destination={destination}
     apikey={GOOGLE_MAPS_APIKEY}
+    language="es"
+    mode="walking"
   />
 </MapView>
 ```
+**NOTE:** Default value for `mode` is `driving`, and for `language` is `en`. You can find more details about travel modes [here](https://developers.google.com/maps/documentation/javascript/examples/directions-travel-modes).
 
 Once the directions in between both coordinates has been fetched, a `MapView.Polyline` between the two will be drawn. Since the result rendered on screen is a `MapView.Polyline` component, all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted:
 
