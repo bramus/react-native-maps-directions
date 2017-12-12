@@ -57,8 +57,8 @@ class MapViewDirections extends Component {
 			apikey,
 			onReady,
 			onError,
-			mode,
-			language,
+			mode = 'driving',
+			language = 'en',
 		} = this.props;
 
 		if (origin.latitude && origin.longitude) {
