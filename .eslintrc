@@ -21,6 +21,9 @@ rules:
   indent:
   - error
   - tab
+  comma-dangle:
+  - error
+  - always-multiline
   no-use-before-define: 2
   no-useless-constructor: 2
   react/no-array-index-key: 2
