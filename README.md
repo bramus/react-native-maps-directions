@@ -30,14 +30,27 @@ const GOOGLE_MAPS_APIKEY = '…';
     origin={origin}
     destination={destination}
     apikey={GOOGLE_MAPS_APIKEY}
-    language="es"
-    mode="walking"
   />
 </MapView>
 ```
-**NOTE:** Default value for `mode` is `driving`, and for `language` is `en`. You can find more details about travel modes [here](https://developers.google.com/maps/documentation/javascript/examples/directions-travel-modes).
 
-Once the directions in between both coordinates has been fetched, a `MapView.Polyline` between the two will be drawn. Since the result rendered on screen is a `MapView.Polyline` component, all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted:
+Once the directions in between `destination` and `origin` has been fetched, a `MapView.Polyline` between the two will be drawn.
+
+## Component API
+
+### Props
+
+| Prop | Type | Default | Note
+|---|---|---|---|
+| `origin` | `LatLng` or `String` | | The origin location.
+| `destination` | `LatLng` or `String` | | The destination location.
+| `apikey` | `String` | | Your Google Maps API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key))_.
+| `language` | `String` | `"en"` | The language to use when calculating directions. See [here](https://developers.google.com/maps/documentation/javascript/localization) for more info.
+| `mode` | `String` | `"driving"` | Which transportation mode to use when calculating directions. Allowed values are `"driving"`, `"bicycling"`, `"walking"`, and `"transit"`. _(See [here](https://developers.google.com/maps/documentation/javascript/examples/directions-travel-modes) for more info)_.
+
+#### More props
+
+Since the result rendered on screen is a `MapView.Polyline` component, all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted.
 
 ```js
 <MapView initialRegion={…}>
@@ -51,34 +64,29 @@ Once the directions in between both coordinates has been fetched, a `MapView.Pol
 </MapView>
 ```
 
-## A note on coordinates
+#### An extra note on `origin` and `destination`
 
-Coordinates can be objects with `latitude` and `longitude` keys, or a string in the format `'latitude,longitude'`.
+`origin` and `destination` can be coordinates in the form of objects with `latitude` and `longitude` keys, or coordinates in the form of a string in the format `'latitude,longitude'`.
 
 ```js
-<MapViewDirections origin={{latitude: 37.3318456, longitude: -122.0296002}} … />
-<MapViewDirections origin="37.3318456,-122.0296002" … />
+<MapViewDirections origin={{ latitude: 37.3317876, longitude: -122.0054812 }} … />
+<MapViewDirections origin="37.3317876,-122.0054812" … />
 ```
 
-## Component API
+Additionally `origin` and `destination` can also be location names. The Google Directions API will translate those to coordinates for you.
 
-### Props
+```js
+<MapViewDirections origin="Apple Park Visitor Center, Cupertino, CA, USA" … />
+```
 
-| Prop | Type | Note |
-|---|---|---|
-| `origin` | `LatLng` or `String` | The coordinate of the origin location
-| `destination` | `LatLng` or `String` | The coordinate of the destination location
-| `apikey` | `String` | Your Google Maps API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key))_.
-
-Since the result rendered on screen is a `MapView.Polyline` component, all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted.
+Don't forget to tweak the `language` prop when using localized location names.
 
 ### Events/Callbacks
 
 | Event Name | Returns | Notes
 |---|---|---|
 | `onReady` | `{ distance: Number, duration: Number, coordinates: [] }` | Callback that is called when the routing has been calculated.
-| `onError` | `errorMessage` | Callback that is called when the routing has failed.
-
+| `onError` | `errorMessage` | Callback that is called in case the routing has failed.
 
 ## Extended Example
 
