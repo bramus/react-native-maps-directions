@@ -154,7 +154,7 @@ MapViewDirections.propTypes = {
 	apikey: PropTypes.string.isRequired,
 	onReady: PropTypes.func,
 	onError: PropTypes.func,
-	mode: PropTypes.string,
+	mode: PropTypes.oneOf(['driving', 'bicycling', 'transit', 'walking']),
 	language: PropTypes.string,
 };
 
