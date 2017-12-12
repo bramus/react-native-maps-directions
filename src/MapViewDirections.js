@@ -44,7 +44,7 @@ class MapViewDirections extends Component {
 		return d = d.map(function(t) {
 			return {
 				latitude: t[0],
-				longitude: t[1]
+				longitude: t[1],
 			}
 		});
 	}
@@ -58,7 +58,7 @@ class MapViewDirections extends Component {
 			onReady,
 			onError,
 			mode,
-			language
+			language,
 		} = this.props;
 
 		if (origin.latitude && origin.longitude) {
@@ -104,7 +104,7 @@ class MapViewDirections extends Component {
 						duration: route.legs.reduce((carry, curr) => {
 							return carry + curr.duration.value;
 						}, 0) / 60,
-						coordinates: this.decode(route.overview_polyline.points)
+						coordinates: this.decode(route.overview_polyline.points),
 					});
 
 				} else {
@@ -155,7 +155,7 @@ MapViewDirections.propTypes = {
 	onReady: PropTypes.func,
 	onError: PropTypes.func,
 	mode: PropTypes.string,
-	language: PropTypes.string
+	language: PropTypes.string,
 };
 
 export default MapViewDirections;
