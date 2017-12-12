@@ -57,6 +57,8 @@ class MapViewDirections extends Component {
 			apikey,
 			onReady,
 			onError,
+			mode,
+			language
 		} = this.props;
 
 		if (origin.latitude && origin.longitude) {
@@ -67,7 +69,7 @@ class MapViewDirections extends Component {
 			destination = `${destination.latitude},${destination.longitude}`;
 		}
 
-		this.fetchRoute(origin, destination, apikey)
+		this.fetchRoute(origin, destination, apikey, mode, language)
 			.then(result => {
 				this.setState(result);
 				onReady && onReady(result);
@@ -79,9 +81,8 @@ class MapViewDirections extends Component {
 			});
 	}
 
-	fetchRoute = (origin, destination, apikey) => {
-		const mode = 'driving';
-		const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${apikey}&mode=${mode}`;
+	fetchRoute = (origin, destination, apikey, mode, language) => {
+		const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${apikey}&mode=${mode}&language=${language}`;
 
 		return fetch(url)
 			.then(response => response.json())
@@ -123,6 +124,8 @@ class MapViewDirections extends Component {
 			apikey, // eslint-disable-line no-unused-vars
 			onReady, // eslint-disable-line no-unused-vars
 			onError, // eslint-disable-line no-unused-vars
+			mode, // eslint-disable-line no-unused-vars
+			language, // eslint-disable-line no-unused-vars
 			...props
 		} = this.props;
 
@@ -151,6 +154,8 @@ MapViewDirections.propTypes = {
 	apikey: PropTypes.string.isRequired,
 	onReady: PropTypes.func,
 	onError: PropTypes.func,
+	mode: PropTypes.string,
+	language: PropTypes.string
 };
 
 export default MapViewDirections;
