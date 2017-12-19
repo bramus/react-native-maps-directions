@@ -15,7 +15,12 @@ class MapViewDirections extends Component {
 	}
 
 	componentDidMount() {
+		this._mounted = true;
 		this.fetchAndRenderRoute();
+	}
+
+	componentWillUnmount() {
+		this._mounted = false;
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -25,7 +30,7 @@ class MapViewDirections extends Component {
 	}
 
 	resetState = (cb = null) => {
-		this.setState({
+		this._mounted && this.setState({
 			coordinates: null,
 			distance: null,
 			duration: null,
@@ -71,6 +76,7 @@ class MapViewDirections extends Component {
 
 		this.fetchRoute(origin, destination, apikey, mode, language)
 			.then(result => {
+				if (!this._mounted) return;
 				this.setState(result);
 				onReady && onReady(result);
 			})
