@@ -45,6 +45,7 @@ Once the directions in between `destination` and `origin` has been fetched, a `M
 | `origin` | `LatLng` or `String` | | The origin location.
 | `destination` | `LatLng` or `String` | | The destination location.
 | `apikey` | `String` | | Your Google Maps API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key))_.
+| `waypoints` | [`LatLng` or `String`] |  | Array of waypoints to use between origin and destination. 
 | `language` | `String` | `"en"` | The language to use when calculating directions. See [here](https://developers.google.com/maps/documentation/javascript/localization) for more info.
 | `mode` | `String` | `"driving"` | Which transportation mode to use when calculating directions. Allowed values are `"driving"`, `"bicycling"`, `"walking"`, and `"transit"`. _(See [here](https://developers.google.com/maps/documentation/javascript/examples/directions-travel-modes) for more info)_.
 
@@ -130,20 +131,12 @@ class Example extends Component {
   }
 
   onMapPress = (e) => {
-    if (this.state.coordinates.length == 2) {
-      this.setState({
-        coordinates: [
-          e.nativeEvent.coordinate,
-        ],
-      });
-    } else {
-      this.setState({
-        coordinates: [
-          ...this.state.coordinates,
-          e.nativeEvent.coordinate,
-        ],
-      });
-    }
+    this.setState({
+      coordinates: [
+        ...this.state.coordinates,
+        e.nativeEvent.coordinate,
+      ],
+    });
   }
 
   render() {
@@ -162,10 +155,11 @@ class Example extends Component {
         {this.state.coordinates.map((coordinate, index) =>
           <MapView.Marker key={`coordinate_${index}`} coordinate={coordinate} />
         )}
-        {(this.state.coordinates.length === 2) && (
+        {(this.state.coordinates.length >= 2) && (
           <MapViewDirections
             origin={this.state.coordinates[0]}
-            destination={this.state.coordinates[1]}
+            waypoints={ (this.state.coordinates.length > 2) ? this.state.coordinates.slice(1, -1): null}
+            destination={this.state.coordinates[this.state.coordinates.length-1]}
             apikey={GOOGLE_MAPS_APIKEY}
             strokeWidth={3}
             strokeColor="hotpink"

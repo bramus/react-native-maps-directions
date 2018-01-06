@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MapView from 'react-native-maps';
+import isEqual from 'lodash.isequal';
 
 class MapViewDirections extends Component {
 
@@ -24,7 +25,7 @@ class MapViewDirections extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if ((nextProps.origin != this.props.origin) || (nextProps.destination != this.props.destination)) {
+		if ((nextProps.origin != this.props.origin) || (nextProps.destination != this.props.destination) || !isEqual(nextProps.waypoints, this.props.waypoints)) {
 			this.resetState(this.fetchAndRenderRoute);
 		}
 	}
@@ -59,6 +60,7 @@ class MapViewDirections extends Component {
 		let {
 			origin,
 			destination,
+			waypoints,
 			apikey,
 			onReady,
 			onError,
@@ -74,7 +76,15 @@ class MapViewDirections extends Component {
 			destination = `${destination.latitude},${destination.longitude}`;
 		}
 
-		this.fetchRoute(origin, destination, apikey, mode, language)
+		if (!waypoints || !waypoints.length) {
+			waypoints = '';
+		} else {
+			waypoints = waypoints
+				.map(waypoint => (waypoint.latitude && waypoint.longitude) ? `${waypoint.latitude},${waypoint.longitude}` : waypoint)
+				.join('|');
+		}
+
+		this.fetchRoute(origin, waypoints, destination, apikey, mode, language)
 			.then(result => {
 				if (!this._mounted) return;
 				this.setState(result);
@@ -87,8 +97,8 @@ class MapViewDirections extends Component {
 			});
 	}
 
-	fetchRoute = (origin, destination, apikey, mode, language) => {
-		const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination}&key=${apikey}&mode=${mode}&language=${language}`;
+	fetchRoute = (origin, waypoints, destination, apikey, mode, language) => {
+		const url = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode}&language=${language}`;
 
 		return fetch(url)
 			.then(response => response.json())
@@ -126,6 +136,7 @@ class MapViewDirections extends Component {
 
 		const {
 			origin, // eslint-disable-line no-unused-vars
+			waypoints, // eslint-disable-line no-unused-vars
 			destination, // eslint-disable-line no-unused-vars
 			apikey, // eslint-disable-line no-unused-vars
 			onReady, // eslint-disable-line no-unused-vars
@@ -150,6 +161,15 @@ MapViewDirections.propTypes = {
 			longitude: PropTypes.number.isRequired,
 		}),
 	]),
+	waypoints: PropTypes.arrayOf(
+		PropTypes.oneOfType([
+			PropTypes.string,
+			PropTypes.shape({
+				latitude: PropTypes.number.isRequired,
+				longitude: PropTypes.number.isRequired,
+			}),
+		]),
+	),
 	destination: PropTypes.oneOfType([
 		PropTypes.string,
 		PropTypes.shape({
