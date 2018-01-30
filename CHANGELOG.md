@@ -1,5 +1,9 @@
 # `react-native-maps-directions` Changelog
 
+## 1.4.1 - 2018-01-31
+
+- Fix a bug where new origin/destination objects (with same values) trigger an endless loop (#13)
+
 ## 1.4.0 - 2018-01-07
 
 - Add support for waypoints (#10)
