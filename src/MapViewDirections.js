@@ -25,7 +25,7 @@ class MapViewDirections extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if ((nextProps.origin != this.props.origin) || (nextProps.destination != this.props.destination) || !isEqual(nextProps.waypoints, this.props.waypoints)) {
+		if (!isEqual(nextProps.origin, this.props.origin) || !isEqual(nextProps.destination, this.props.destination) || !isEqual(nextProps.waypoints, this.props.waypoints)) {
 			this.resetState(this.fetchAndRenderRoute);
 		}
 	}
