@@ -14,8 +14,8 @@ yarn add react-native-maps-directions
 
 Import `MapViewDirections` and render it as a child of a `MapView` component. The mandatory `MapViewDirections` props are:
 
-- `origin`: The coordinate of the origin location
-- `destination`: The coordinate of the destination location
+- `origin`: The origin location to start routing from
+- `destination`: The destination location to start routing to
 - `apikey`: Your Google Maps API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key))_.
 
 ```js
@@ -42,10 +42,10 @@ Once the directions in between `destination` and `origin` has been fetched, a `M
 
 | Prop | Type | Default | Note
 |---|---|---|---|
-| `origin` | `LatLng` or `String` | | The origin location.
-| `destination` | `LatLng` or `String` | | The destination location.
+| `origin` | `LatLng` or `String` | | The origin location to start routing from.
+| `destination` | `LatLng` or `String` | | The destination location to start routing to.
 | `apikey` | `String` | | Your Google Maps API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key))_.
-| `waypoints` | [`LatLng` or `String`] |  | Array of waypoints to use between origin and destination. 
+| `waypoints` | [`LatLng` or `String`] |  | Array of waypoints to use between origin and destination.
 | `language` | `String` | `"en"` | The language to use when calculating directions. See [here](https://developers.google.com/maps/documentation/javascript/localization) for more info.
 | `mode` | `String` | `"driving"` | Which transportation mode to use when calculating directions. Allowed values are `"driving"`, `"bicycling"`, `"walking"`, and `"transit"`. _(See [here](https://developers.google.com/maps/documentation/javascript/examples/directions-travel-modes) for more info)_.
 
@@ -67,20 +67,27 @@ Since the result rendered on screen is a `MapView.Polyline` component, all [`Map
 
 #### An extra note on `origin` and `destination`
 
-`origin` and `destination` can be coordinates in the form of objects with `latitude` and `longitude` keys, or coordinates in the form of a string in the format `'latitude,longitude'`.
+The values for the `origin` and `destination` props can take several forms. They can either be:
+
+- Coordinates in the form of an object with `latitude` and `longitude` keys
+- Coordinates in the form of a string  with `latitude` and `longitude` values separated by a comma
+- Strings representing an address
+- Strings representing a location
+- Strings containing a Place Id from the Google Maps Place API prefixed with `place_id:`
+
+All examples below have the same `origin` location, represented in the formats mentioned above:
 
 ```js
-<MapViewDirections origin={{ latitude: 37.3317876, longitude: -122.0054812 }} … />
-<MapViewDirections origin="37.3317876,-122.0054812" … />
+<MapViewDirections origin={{ latitude: 37.3317876, longitude: -122.0054812 }} destination="…" />
+<MapViewDirections origin="37.3317876,-122.0054812" destination="…" />
+<MapViewDirections origin="Apple Park Visitor Center" destination="…" />
+<MapViewDirections origin="10600 N Tantau Ave, Cupertino, CA 95014, USA" destination="…" />
+<MapViewDirections origin="place_id:ChIJW5i0tJC1j4ARoUGtkogTaUU" destination="…" />
 ```
 
-Additionally `origin` and `destination` can also be location names. The Google Directions API will translate those to coordinates for you.
+Note: The `origin` and `destination` props don't need to use the same representation, you may mix them.
 
-```js
-<MapViewDirections origin="Apple Park Visitor Center, Cupertino, CA, USA" … />
-```
-
-Don't forget to tweak the `language` prop when using localized location names.
+Tip: Don't forget to tweak the `language` prop when using localized location names.
 
 ### Events/Callbacks
 
