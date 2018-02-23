@@ -17,7 +17,7 @@ class MapViewDirections extends Component {
 
 	componentDidMount() {
 		this._mounted = true;
-		this.fetchAndRenderRoute();
+		this.fetchAndRenderRoute(this.props);
 	}
 
 	componentWillUnmount() {
@@ -26,7 +26,13 @@ class MapViewDirections extends Component {
 
 	componentWillReceiveProps(nextProps) {
 		if (!isEqual(nextProps.origin, this.props.origin) || !isEqual(nextProps.destination, this.props.destination) || !isEqual(nextProps.waypoints, this.props.waypoints)) {
-			this.resetState(this.fetchAndRenderRoute);
+			if (nextProps.resetOnChange === false) {
+				this.fetchAndRenderRoute(nextProps);
+			} else {
+				this.resetState(() => {
+					this.fetchAndRenderRoute(nextProps);
+				});
+			}
 		}
 	}
 
@@ -55,7 +61,7 @@ class MapViewDirections extends Component {
 		});
 	}
 
-	fetchAndRenderRoute = () => {
+	fetchAndRenderRoute = (props) => {
 
 		let {
 			origin,
@@ -66,7 +72,11 @@ class MapViewDirections extends Component {
 			onError,
 			mode = 'driving',
 			language = 'en',
-		} = this.props;
+		} = props;
+
+		if (!origin || !destination) {
+			return;
+		}
 
 		if (origin.latitude && origin.longitude) {
 			origin = `${origin.latitude},${origin.longitude}`;
@@ -76,7 +86,7 @@ class MapViewDirections extends Component {
 			destination = `${destination.latitude},${destination.longitude}`;
 		}
 
-		if (!waypoints || !waypoints.length) {
+		if (!waypoints || !waypoints.length) {
 			waypoints = '';
 		} else {
 			waypoints = waypoints
@@ -182,6 +192,7 @@ MapViewDirections.propTypes = {
 	onError: PropTypes.func,
 	mode: PropTypes.oneOf(['driving', 'bicycling', 'transit', 'walking']),
 	language: PropTypes.string,
+	resetOnChange: PropTypes.bool,
 };
 
 export default MapViewDirections;
