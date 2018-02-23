@@ -68,6 +68,7 @@ class MapViewDirections extends Component {
 			destination,
 			waypoints,
 			apikey,
+			onStart,
 			onReady,
 			onError,
 			mode = 'driving',
@@ -93,6 +94,12 @@ class MapViewDirections extends Component {
 				.map(waypoint => (waypoint.latitude && waypoint.longitude) ? `${waypoint.latitude},${waypoint.longitude}` : waypoint)
 				.join('|');
 		}
+
+		onStart && onStart({
+			origin,
+			destination,
+			waypoints: waypoints ? waypoints.split('|') : [],
+		});
 
 		this.fetchRoute(origin, waypoints, destination, apikey, mode, language)
 			.then(result => {
@@ -188,6 +195,7 @@ MapViewDirections.propTypes = {
 		}),
 	]),
 	apikey: PropTypes.string.isRequired,
+	onStart: PropTypes.func,
 	onReady: PropTypes.func,
 	onError: PropTypes.func,
 	mode: PropTypes.oneOf(['driving', 'bicycling', 'transit', 'walking']),

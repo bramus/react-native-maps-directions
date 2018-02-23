@@ -94,7 +94,8 @@ Tip: Don't forget to tweak the `language` prop when using localized location nam
 
 | Event Name | Returns | Notes
 |---|---|---|
-| `onReady` | `{ distance: Number, duration: Number, coordinates: [] }` | Callback that is called when the routing has been calculated.
+| `onStart` | `{ origin, destination, waypoints: [] }` | Callback that is called when the routing has started.
+| `onReady` | `{ distance: Number, duration: Number, coordinates: [] }` | Callback that is called when the routing has succesfully finished.
 | `onError` | `errorMessage` | Callback that is called in case the routing has failed.
 
 ## Extended Example
@@ -171,6 +172,9 @@ class Example extends Component {
             apikey={GOOGLE_MAPS_APIKEY}
             strokeWidth={3}
             strokeColor="hotpink"
+            onStart={(params) => {
+              console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+            }}
             onReady={(result) => {
               this.mapView.fitToCoordinates(result.coordinates, {
                 edgePadding: {
