@@ -1,5 +1,10 @@
 # `react-native-maps-directions` Changelog
 
+## 1.5.0 - 2018-02-23
+
+- Add support for `resetOnChange` prop to prevent glitches whenn recalculating (#21)
+- Add `onStart` callback prop to know when routing starts
+
 ## 1.4.1 - 2018-01-31
 
 - Fix a bug where new origin/destination objects (with same values) trigger an endless loop (#13)
