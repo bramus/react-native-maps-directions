@@ -1,5 +1,9 @@
 # `react-native-maps-directions` Changelog
 
+## 1.6.0 - 2018-03-09
+
+- Add `directionsServiceBaseUrl` prop to allow customisation of service to use.
+
 ## 1.5.0 - 2018-02-23
 
 - Add support for `resetOnChange` prop to prevent glitches whenn recalculating (#21)
