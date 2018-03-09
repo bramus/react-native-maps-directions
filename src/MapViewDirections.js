@@ -115,7 +115,7 @@ class MapViewDirections extends Component {
 			});
 	}
 
-	fetchRoute = (directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language) => {
+	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language) {
 
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
