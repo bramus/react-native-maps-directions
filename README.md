@@ -34,7 +34,7 @@ const GOOGLE_MAPS_APIKEY = '…';
 </MapView>
 ```
 
-Once the directions in between `destination` and `origin` has been fetched, a `MapView.Polyline` between the two will be drawn.
+Once the directions in between `destination` and `origin` has been fetched, a `MapView.Polyline` between the two will be drawn. Whenever one of both changes, new directions will be fetched and rendered.
 
 ## Component API
 
