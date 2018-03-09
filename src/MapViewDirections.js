@@ -116,7 +116,7 @@ class MapViewDirections extends Component {
 
 	fetchRoute = (origin, waypoints, destination, apikey, mode, language) => {
 		//check if url prop is provided, if not, then use default Google's URL
-		let url = this.props.url || 'https://maps.googleapis.com/maps/api/directions/json';
+		let url = this.props.directionsServiceBaseUrl || 'https://maps.googleapis.com/maps/api/directions/json';
 		//if using a URL (custom or default), then add default parameters to it
 		//if using a custom Request object then leave it as it is 
 		if (typeof (url) === 'string') {
@@ -207,7 +207,7 @@ MapViewDirections.propTypes = {
 	mode: PropTypes.oneOf(['driving', 'bicycling', 'transit', 'walking']),
 	language: PropTypes.string,
 	resetOnChange: PropTypes.bool,
-	url: PropTypes.string,
+	directionsServiceBaseUrl: PropTypes.string,
 };
 
 export default MapViewDirections;
