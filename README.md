@@ -16,7 +16,7 @@ Import `MapViewDirections` and render it as a child of a `MapView` component. Th
 
 - `origin`: The origin location to start routing from
 - `destination`: The destination location to start routing to
-- `apikey`: Your Google Maps API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key))_.
+- `apikey`: Your Google Maps Directions API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key); if you're using an existing Google Maps API Key make sure you've enabled the Google Maps Directions API for that key using the [Google API Console](https://console.developers.google.com/apis/))_.
 
 ```js
 import MapViewDirections from 'react-native-maps-directions';
@@ -44,7 +44,7 @@ Once the directions in between `destination` and `origin` has been fetched, a `M
 |---|---|---|---|
 | `origin` | `LatLng` or `String` | | The origin location to start routing from.
 | `destination` | `LatLng` or `String` | | The destination location to start routing to.
-| `apikey` | `String` | | Your Google Maps API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key))_.
+| `apikey` | `String` | | Your Google Maps API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key); if you're using an existing Google Maps API Key make sure you've enabled the Google Maps Directions API for that key using the [Google API Console](https://console.developers.google.com/apis/) by hitting the “Enable APIs and Services“ button)_.
 | `waypoints` | [`LatLng` or `String`] |  | Array of waypoints to use between origin and destination.
 | `language` | `String` | `"en"` | The language to use when calculating directions. See [here](https://developers.google.com/maps/documentation/javascript/localization) for more info.
 | `mode` | `String` | `"driving"` | Which transportation mode to use when calculating directions. Allowed values are `"driving"`, `"bicycling"`, `"walking"`, and `"transit"`. _(See [here](https://developers.google.com/maps/documentation/javascript/examples/directions-travel-modes) for more info)_.
