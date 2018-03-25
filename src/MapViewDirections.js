@@ -144,6 +144,7 @@ class MapViewDirections extends Component {
 							return carry + curr.duration.value;
 						}, 0) / 60,
 						coordinates: this.decode(route.overview_polyline.points),
+						fare: route.fare
 					});
 
 				} else {

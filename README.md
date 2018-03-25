@@ -96,7 +96,7 @@ Tip: Don't forget to tweak the `language` prop when using localized location nam
 | Event Name | Returns | Notes
 |---|---|---|
 | `onStart` | `{ origin, destination, waypoints: [] }` | Callback that is called when the routing has started.
-| `onReady` | `{ distance: Number, duration: Number, coordinates: [] }` | Callback that is called when the routing has succesfully finished.
+| `onReady` | `{ distance: Number, duration: Number, coordinates: [], fare: Object }` | Callback that is called when the routing has succesfully finished.
 | `onError` | `errorMessage` | Callback that is called in case the routing has failed.
 
 ## Extended Example
