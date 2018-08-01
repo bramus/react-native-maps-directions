@@ -45,20 +45,35 @@ class MapViewDirections extends Component {
 	}
 
 	decode(t, e) {
-		for (var n, o, u = 0, l = 0, r = 0, d = [], h = 0, i = 0, a = null, c = Math.pow(10, e || 5); u < t.length;) {
-			a = null, h = 0, i = 0;
-			do a = t.charCodeAt(u++) - 63, i |= (31 & a) << h, h += 5; while (a >= 32);
-			n = 1 & i ? ~(i >> 1) : i >> 1, h = i = 0;
-			do a = t.charCodeAt(u++) - 63, i |= (31 & a) << h, h += 5; while (a >= 32);
-			o = 1 & i ? ~(i >> 1) : i >> 1, l += n, r += o, d.push([l / c, r / c]);
-		}
+        let points = [];
+        for (let step of t) {
+            let encoded = step.polyline.points;
+            let index = 0, len = encoded.length;
+            let lat = 0, lng = 0;
+            while (index < len) {
+                let b, shift = 0, result = 0;
+                do {
+                    b = encoded.charAt(index++).charCodeAt(0) - 63;//finds ascii                                                                                    //and substract it by 63
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
 
-		return d = d.map(function(t) {
-			return {
-				latitude: t[0],
-				longitude: t[1],
-			};
-		});
+                let dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+                lat += dlat;
+                shift = 0;
+                result = 0;
+                do {
+                    b = encoded.charAt(index++).charCodeAt(0) - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+                let dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+                lng += dlng;
+
+                points.push({ latitude: (lat / 1E5), longitude: (lng / 1E5) })
+            }
+        }
+        return points;
 	}
 
 	fetchAndRenderRoute = (props) => {
@@ -143,7 +158,7 @@ class MapViewDirections extends Component {
 						duration: route.legs.reduce((carry, curr) => {
 							return carry + curr.duration.value;
 						}, 0) / 60,
-						coordinates: this.decode(route.overview_polyline.points),
+                        coordinates: this.decode(route.legs[0].steps),
 						fare: route.fare
 					});
 
@@ -159,14 +174,14 @@ class MapViewDirections extends Component {
 		}
 
 		const {
-			origin, // eslint-disable-line no-unused-vars
-			waypoints, // eslint-disable-line no-unused-vars
-			destination, // eslint-disable-line no-unused-vars
-			apikey, // eslint-disable-line no-unused-vars
-			onReady, // eslint-disable-line no-unused-vars
-			onError, // eslint-disable-line no-unused-vars
-			mode, // eslint-disable-line no-unused-vars
-			language, // eslint-disable-line no-unused-vars
+			origin, // eslint-disable-line no-unused-lets
+			waypoints, // eslint-disable-line no-unused-lets
+			destination, // eslint-disable-line no-unused-lets
+			apikey, // eslint-disable-line no-unused-lets
+			onReady, // eslint-disable-line no-unused-lets
+			onError, // eslint-disable-line no-unused-lets
+			mode, // eslint-disable-line no-unused-lets
+			language, // eslint-disable-line no-unused-lets
 			...props
 		} = this.props;
 
