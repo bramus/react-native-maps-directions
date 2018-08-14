@@ -1,5 +1,9 @@
 # `react-native-maps-directions` Changelog
 
+## 1.7.0 - 2018-08-14
+
+- Add `optimizeWaypoints` prop to allow use of waypoints optimization.
+
 ## 1.6.0 - 2018-03-09
 
 - Add `directionsServiceBaseUrl` prop to allow customisation of service to use.

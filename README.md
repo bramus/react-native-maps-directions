@@ -49,6 +49,7 @@ Once the directions in between `destination` and `origin` has been fetched, a `M
 | `language` | `String` | `"en"` | The language to use when calculating directions. See [here](https://developers.google.com/maps/documentation/javascript/localization) for more info.
 | `mode` | `String` | `"driving"` | Which transportation mode to use when calculating directions. Allowed values are `"driving"`, `"bicycling"`, `"walking"`, and `"transit"`. _(See [here](https://developers.google.com/maps/documentation/javascript/examples/directions-travel-modes) for more info)_.
 | `resetOnChange` | `boolean` | `true` | Tweak if the rendered `MapView.Polyline` should reset or not when calculating the route between `origin` and `destionation`. Set to `false` if you see the directions line glitching.
+| `optimizeWaypoints` | `boolean` | `false` | Set it to true if you would like Google Maps to re-order all the waypoints to optimize the route for the fastest route. Please be aware that if this option is enabled, you will be billed for a higher rate by Google as stated [here](https://developers.google.com/maps/documentation/javascript/directions#Waypoints).
 | `directionsServiceBaseUrl` | `string` | _(Google's)_ | Base URL of the Directions Service (API) you are using. By default the Google Directions API is used (`"https://maps.googleapis.com/maps/api/directions/json"`). Usually you won't need to change this.
 
 #### More props
@@ -173,6 +174,7 @@ class Example extends Component {
             apikey={GOOGLE_MAPS_APIKEY}
             strokeWidth={3}
             strokeColor="hotpink"
+            optimizeWaypoints={true}
             onStart={(params) => {
               console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
             }}
