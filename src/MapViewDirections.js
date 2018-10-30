@@ -150,6 +150,12 @@ class MapViewDirections extends Component {
 				} else {
 					return Promise.reject();
 				}
+			})
+			.catch(err => {
+				console.warn(
+          'react-native-maps-directions Error on GMAPS route request',
+          err
+        );
 			});
 	}
 
