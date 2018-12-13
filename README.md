@@ -96,7 +96,7 @@ Tip: Don't forget to tweak the `language` prop when using localized location nam
 | Event Name | Returns | Notes
 |---|---|---|
 | `onStart` | `{ origin, destination, waypoints: [] }` | Callback that is called when the routing has started.
-| `onReady` | `{ distance: Number, duration: Number, coordinates: [], fare: Object }` | Callback that is called when the routing has succesfully finished.
+| `onReady` | `{ distance: Number, duration: Number, coordinates: [], fare: Object }` | Callback that is called when the routing has succesfully finished. Note: distance returned in kilometers and duration in minutes.
 | `onError` | `errorMessage` | Callback that is called in case the routing has failed.
 
 ## Extended Example
@@ -176,7 +176,10 @@ class Example extends Component {
             onStart={(params) => {
               console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
             }}
-            onReady={(result) => {
+            onReady={result => {
+              console.log('Distance: ${result.distance} km')
+              console.log('Duration: ${result.duration} min.')
+              
               this.mapView.fitToCoordinates(result.coordinates, {
                 edgePadding: {
                   right: (width / 20),
