@@ -73,6 +73,7 @@ class MapViewDirections extends Component {
 			onError,
 			mode = 'driving',
 			language = 'en',
+			optimizeWaypoints,
 			directionsServiceBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json',
 			region,
 		} = props;
@@ -95,6 +96,10 @@ class MapViewDirections extends Component {
 			waypoints = waypoints
 				.map(waypoint => (waypoint.latitude && waypoint.longitude) ? `${waypoint.latitude},${waypoint.longitude}` : waypoint)
 				.join('|');
+		}
+
+		if (optimizeWaypoints) {
+			waypoints = `optimize:true|${waypoints}`;
 		}
 
 		onStart && onStart({
@@ -145,7 +150,7 @@ class MapViewDirections extends Component {
 							return carry + curr.duration.value;
 						}, 0) / 60,
 						coordinates: this.decode(route.overview_polyline.points),
-						fare: route.fare
+						fare: route.fare,
 					});
 
 				} else {
@@ -216,6 +221,7 @@ MapViewDirections.propTypes = {
 	mode: PropTypes.oneOf(['driving', 'bicycling', 'transit', 'walking']),
 	language: PropTypes.string,
 	resetOnChange: PropTypes.bool,
+	optimizeWaypoints: PropTypes.bool,
 	directionsServiceBaseUrl: PropTypes.string,
 	region: PropTypes.string,
 };
