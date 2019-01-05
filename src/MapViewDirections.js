@@ -74,6 +74,7 @@ class MapViewDirections extends Component {
 			mode = 'driving',
 			language = 'en',
 			directionsServiceBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json',
+			region,
 		} = props;
 
 		if (!origin || !destination) {
@@ -102,7 +103,7 @@ class MapViewDirections extends Component {
 			waypoints: waypoints ? waypoints.split('|') : [],
 		});
 
-		this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language)
+		this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region)
 			.then(result => {
 				if (!this._mounted) return;
 				this.setState(result);
@@ -115,12 +116,12 @@ class MapViewDirections extends Component {
 			});
 	}
 
-	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language) {
+	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region) {
 
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
 		if (typeof (directionsServiceBaseUrl) === 'string') {
-			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode}&language=${language}`;
+			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode}&language=${language}&region=${region}`;
 		}
 
 		return fetch(url)
@@ -173,6 +174,7 @@ class MapViewDirections extends Component {
 			onError, // eslint-disable-line no-unused-vars
 			mode, // eslint-disable-line no-unused-vars
 			language, // eslint-disable-line no-unused-vars
+			region,
 			...props
 		} = this.props;
 
@@ -215,6 +217,7 @@ MapViewDirections.propTypes = {
 	language: PropTypes.string,
 	resetOnChange: PropTypes.bool,
 	directionsServiceBaseUrl: PropTypes.string,
+	region: PropTypes.string,
 };
 
 export default MapViewDirections;
