@@ -1,4 +1,10 @@
-# `react-native-maps-directions` [![npm version](https://img.shields.io/npm/v/react-native-maps-directions.svg?style=flat)](https://www.npmjs.com/package/react-native-maps-directions)
+# `react-native-maps-directions`
+
+[![npm version](https://img.shields.io/npm/v/react-native-maps-directions.svg?style=flat)](https://www.npmjs.com/package/react-native-maps-directions)
+![npm](https://img.shields.io/npm/dm/react-native-maps-directions.svg)
+![GitHub contributors](https://img.shields.io/github/contributors/bramus/react-native-maps-directions.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/bramus/react-native-maps-directions.svg)
+![NPM](https://img.shields.io/npm/l/react-native-maps-directions.svg)
 
 Directions component for [`react-native-maps`](https://github.com/airbnb/react-native-maps/) – Draw a route between two coordinates, powered by the Google Maps Directions API
 
