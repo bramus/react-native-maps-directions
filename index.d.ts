@@ -2,6 +2,7 @@ declare module "react-native-maps-directions" {
   // Type definitions for react-native-maps-directions 1.6
   // Project: https://github.com/bramus/react-native-maps-directions
   // Definitions by: Ali Oguzhan Yildiz <https://github.com/alioguzhan>
+  // Definitions by: Chris Shaffer (methodbox)<https://github.com/methodbox>
   // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
   // TypeScript Version: 3.3
 
