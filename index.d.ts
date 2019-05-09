@@ -1,39 +1,40 @@
-// Type definitions for react-native-maps-directions 1.6
-// Project: https://github.com/bramus/react-native-maps-directions
-// Definitions by: Ali Oguzhan Yildiz <https://github.com/alioguzhan>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 3.3
+declare module "react-native-maps-directions" {
+  // Type definitions for react-native-maps-directions 1.6
+  // Project: https://github.com/bramus/react-native-maps-directions
+  // Definitions by: Ali Oguzhan Yildiz <https://github.com/alioguzhan>
+  // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+  // TypeScript Version: 3.3
 
-import * as React from 'react';
+  import * as React from "react";
 
-export type MapViewDirectionsOrigin =
+  export type MapViewDirectionsOrigin =
     | string
     | {
-          latitude: number;
-          longitude: number;
+        latitude: number;
+        longitude: number;
       };
 
-export type MapViewDirectionsWaypoints =
+  export type MapViewDirectionsWaypoints =
     | string
     | {
-          latitude: number;
-          longitude: number;
+        latitude: number;
+        longitude: number;
       };
 
-export type MapViewDirectionsDestination =
+  export type MapViewDirectionsDestination =
     | string
     | {
-          latitude: number;
-          longitude: number;
+        latitude: number;
+        longitude: number;
       };
 
-export type MapViewDirectionsMode =
-    | 'DRIVING'
-    | 'BICYCLING'
-    | 'TRANSIT'
-    | 'WALKING';
+  export type MapViewDirectionsMode =
+    | "DRIVING"
+    | "BICYCLING"
+    | "TRANSIT"
+    | "WALKING";
 
-export interface MapViewDirectionsProps {
+  export interface MapViewDirectionsProps {
     /**
      * The origin location to start routing from.
      */
@@ -97,11 +98,90 @@ export interface MapViewDirectionsProps {
      * Google Maps API needs the region where this places belong to.
      */
     region?: string;
-}
+    /**
+     * @number
+     * The stroke width to use for the path - the line displayed
+     * by polyline between two navigation points.
+     * Default: 1
+     */
+    strokeWidth?: number;
+    /**
+     * @string
+     * The stroke color to use for the path.
+     * Default: "#000"
+     */
+    strokeColor?: string;
+    /**
+     * @Array
+     * The stroke colors to use for the path (iOS only).
+     * Must be the same length as coordinates.
+     * Default: null
+     */
+    strokeColors?: Array<string>;
+    /**
+     * @string
+     * The line cap style to apply to the open ends of the path.
+     * Possible values are butt, round or square.
+     * Note: lineCap is not yet supported for GoogleMaps provider on iOS.
+     * Default: "round"
+     */
+    lineCap?: string;
+    /**
+     * @string
+     * The line join style to apply to corners of the path.
+     * Possible values are miter, round or bevel.
+     * Default: "round"
+     */
+    lineJoin?: string;
+    /**
+     * @number
+     * The limiting value that helps avoid spikes at junctions
+     * between connected line segments. The miter limit helps you avoid
+     * spikes in paths that use the miter lineJoin style. If the ratio of
+     * the miter length—that is, the diagonal length of the miter join—to
+     * the line thickness exceeds the miter limit, the joint is converted
+     * to a bevel join. The default miter limit is 10, which results in the
+     * conversion of miters whose angle at the joint is less than 11 degrees.
+     */
+    miterLimit?: number;
+    /**
+     * @boolean
+     * Boolean to indicate whether to draw each segment of the line as a geodesic
+     * as opposed to straight lines on the Mercator projection. A geodesic is the
+     * shortest path between two points on the Earth's surface.
+     * The geodesic curve is constructed assuming the Earth is a sphere.
+     */
+    geodesic?: boolean;
+    /**
+     * @number
+     * (iOS only) The offset (in points) at which to start drawing the
+     * dash pattern. Use this property to start drawing a dashed line
+     * partway through a segment or gap. For example, a phase value of 6 for
+     * the patter 5-2-3-2 would cause drawing to begin in the middle of the first gap.
+     * Default: 0
+     */
+    lineDashPhase?: number;
+    /**
+     * @Array
+     * An array of numbers specifying the dash pattern to use for the path.
+     * The array contains one or more numbers that indicate the lengths (measured in points)
+     * of the line segments and gaps in the pattern. The values in the array alternate,
+     * starting with the first line segment length, followed by the first gap length,
+     * followed by the second line segment length, and so on.
+     * Default: null
+     */
+    lineDashPattern?: Array<number>;
+    /**
+     * @boolean
+     * Boolean to allow a polyline to be tappable and use the onPress function.
+     */
+    tappable?: boolean;
+  }
 
-export default class MapViewDirections extends React.Component<
+  export default class MapViewDirections extends React.Component<
     MapViewDirectionsProps,
     any
-> {
+  > {
     render(): JSX.Element;
+  }
 }
