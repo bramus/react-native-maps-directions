@@ -165,7 +165,6 @@ class MapViewDirections extends Component {
     let url = directionsServiceBaseUrl;
     if (typeof directionsServiceBaseUrl === "string") {
       url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode}&language=${language}&departure_time=now`;
-      console.log(url);
     }
 
     return fetch(url)
