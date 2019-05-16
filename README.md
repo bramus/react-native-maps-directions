@@ -12,9 +12,19 @@ Directions component for [`react-native-maps`](https://github.com/airbnb/react-n
 
 ## Installation
 
-```
-yarn add react-native-maps-directions
-```
+Install `react-native-maps-directions` as a dependency using either
+
+- [Node's `npm`](https://nodejs.org/en/download/)
+
+  ```
+  npm install react-native-maps-directions
+  ```
+
+- [Yarn](https://yarnpkg.com/en/docs/install)
+
+  ```
+  yarn add react-native-maps-directions
+  ```
 
 ## Basic Usage
 
