@@ -126,7 +126,7 @@ class MapViewDirections extends Component {
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
 		if (typeof (directionsServiceBaseUrl) === 'string') {
-			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode.toLowerCase()}&language=${language}&region=${region}`;
+			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode.toLowerCase()}&language=${language}&region=${region}&departure_time=now`;
 		}
 
 		return fetch(url)
@@ -147,7 +147,7 @@ class MapViewDirections extends Component {
 							return carry + curr.distance.value;
 						}, 0) / 1000,
 						duration: route.legs.reduce((carry, curr) => {
-							return carry + curr.duration.value;
+							return carry + curr.duration_in_traffic ? curr.duration_in_traffic.value:curr.duration.value;
 						}, 0) / 60,
 						coordinates: this.decode(route.overview_polyline.points),
 						fare: route.fare,
