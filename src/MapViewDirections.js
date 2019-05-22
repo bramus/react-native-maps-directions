@@ -223,16 +223,17 @@ MapViewDirections.propTypes = {
 			latitude: PropTypes.number.isRequired,
 			longitude: PropTypes.number.isRequired,
 		}),
-    ]),
-    autoTransitColor: PropTypes.bool,
+	]),
 	apikey: PropTypes.string.isRequired,
 	onStart: PropTypes.func,
 	onReady: PropTypes.func,
 	onError: PropTypes.func,
-	mode: PropTypes.oneOf(['driving', 'bicycling', 'transit', 'walking']),
+	mode: PropTypes.oneOf(['DRIVING', 'BICYCLING', 'TRANSIT', 'WALKING']),
 	language: PropTypes.string,
 	resetOnChange: PropTypes.bool,
+	optimizeWaypoints: PropTypes.bool,
 	directionsServiceBaseUrl: PropTypes.string,
+	region: PropTypes.string,
 };
 
 export default MapViewDirections;
