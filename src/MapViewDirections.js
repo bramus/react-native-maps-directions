@@ -11,7 +11,8 @@ class MapViewDirections extends Component {
 		this.state = {
 			coordinates: null,
 			distance: null,
-			duration: null,
+            duration: null,
+            steps: null
 		};
 	}
 
@@ -25,7 +26,7 @@ class MapViewDirections extends Component {
 	}
 
 	componentWillReceiveProps(nextProps) {
-		if (!isEqual(nextProps.origin, this.props.origin) || !isEqual(nextProps.destination, this.props.destination) || !isEqual(nextProps.waypoints, this.props.waypoints) || !isEqual(nextProps.mode, this.props.mode)) {
+		if (!isEqual(nextProps.origin, this.props.origin) || !isEqual(nextProps.destination, this.props.destination) || !isEqual(nextProps.waypoints, this.props.waypoints)) {
 			if (nextProps.resetOnChange === false) {
 				this.fetchAndRenderRoute(nextProps);
 			} else {
@@ -73,9 +74,7 @@ class MapViewDirections extends Component {
 			onError,
 			mode = 'DRIVING',
 			language = 'en',
-			optimizeWaypoints,
 			directionsServiceBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json',
-			region,
 		} = props;
 
 		if (!origin || !destination) {
@@ -98,17 +97,13 @@ class MapViewDirections extends Component {
 				.join('|');
 		}
 
-		if (optimizeWaypoints) {
-			waypoints = `optimize:true|${waypoints}`;
-		}
-
 		onStart && onStart({
 			origin,
 			destination,
 			waypoints: waypoints ? waypoints.split('|') : [],
 		});
 
-		this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region)
+		this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language)
 			.then(result => {
 				if (!this._mounted) return;
 				this.setState(result);
@@ -121,12 +116,12 @@ class MapViewDirections extends Component {
 			});
 	}
 
-	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region) {
+	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language) {
 
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
 		if (typeof (directionsServiceBaseUrl) === 'string') {
-			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode.toLowerCase()}&language=${language}&region=${region}`;
+			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode}&language=${language}`;
 		}
 
 		return fetch(url)
@@ -136,7 +131,7 @@ class MapViewDirections extends Component {
 				if (json.status !== 'OK') {
 					const errorMessage = json.error_message || 'Unknown error';
 					return Promise.reject(errorMessage);
-				}
+                }
 
 				if (json.routes.length) {
 
@@ -148,20 +143,15 @@ class MapViewDirections extends Component {
 						}, 0) / 1000,
 						duration: route.legs.reduce((carry, curr) => {
 							return carry + curr.duration.value;
-						}, 0) / 60,
-						coordinates: this.decode(route.overview_polyline.points),
-						fare: route.fare,
+                        }, 0) / 60,
+                        durationText: route.legs[0].duration.text,
+                        coordinates: this.decode(route.overview_polyline.points),
+                        steps: route.legs[0].steps
 					});
 
 				} else {
 					return Promise.reject();
 				}
-			})
-			.catch(err => {
-				console.warn(
-          'react-native-maps-directions Error on GMAPS route request',
-          err
-        );
 			});
 	}
 
@@ -178,14 +168,34 @@ class MapViewDirections extends Component {
 			onReady, // eslint-disable-line no-unused-vars
 			onError, // eslint-disable-line no-unused-vars
 			mode, // eslint-disable-line no-unused-vars
-			language, // eslint-disable-line no-unused-vars
-			region,
+            language, // eslint-disable-line no-unused-vars
+            autoTransitColor, // eslint-disable-line no-unused-vars
 			...props
-		} = this.props;
+        } = this.props;
+        
+        const {
+            coordinates,
+			distance,
+            duration,
+            steps
+        } = this.state;
 
-		return (
-			<MapView.Polyline coordinates={this.state.coordinates} {...props} />
-		);
+        if (autoTransitColor) {
+            return steps.map((step, index) => {
+                let color = this.props.strokeColor;
+                if (step.travel_mode == "TRANSIT") {
+                    color = step.transit_details.line.color
+                }
+
+                return (
+                    <MapView.Polyline key={index} coordinates={this.decode(step.polyline.points)} {...props} strokeColor={color} />
+                );
+            })
+        } else {
+            return (
+                <MapView.Polyline coordinates={coordinates} {...props} />
+            );
+        }
 	}
 
 }

@@ -68,6 +68,7 @@ Once the directions in between `destination` and `origin` has been fetched, a `M
 | `optimizeWaypoints` | `boolean` | `false` | Set it to true if you would like Google Maps to re-order all the waypoints to optimize the route for the fastest route. Please be aware that if this option is enabled, you will be billed for a higher rate by Google as stated [here](https://developers.google.com/maps/documentation/javascript/directions#Waypoints).
 | `directionsServiceBaseUrl` | `string` | _(Google's)_ | Base URL of the Directions Service (API) you are using. By default the Google Directions API is used (`"https://maps.googleapis.com/maps/api/directions/json"`). Usually you won't need to change this.
 | `region` | `String` | | If you are using strings for **origin** or **destination**, sometimes you will get an incorrect route because Google Maps API needs the region where this places belong to. See [here](https://developers.google.com/maps/documentation/javascript/localization#Region) for more info.
+| `autoTransitColor` | `boolean` | `false` | Set it to true if you would like the directions line to be split in to coloured segments based on the transport type.
 
 #### More props
 
@@ -114,7 +115,7 @@ Tip: Don't forget to tweak the `language` prop when using localized location nam
 | Event Name | Returns | Notes
 |---|---|---|
 | `onStart` | `{ origin, destination, waypoints: [] }` | Callback that is called when the routing has started.
-| `onReady` | `{ distance: Number, duration: Number, coordinates: [], fare: Object }` | Callback that is called when the routing has succesfully finished. Note: distance returned in kilometers and duration in minutes.
+| `onReady` | `{ distance: Number, duration: Number, durationText: String, coordinates: [], fare: Object. steps: [] }` | Callback that is called when the routing has succesfully finished. Note: distance returned in kilometers and duration in minutes.
 | `onError` | `errorMessage` | Callback that is called in case the routing has failed.
 
 ## Extended Example
