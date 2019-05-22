@@ -72,7 +72,7 @@ class MapViewDirections extends Component {
 			onStart,
 			onReady,
 			onError,
-			mode = 'driving',
+			mode = 'DRIVING',
 			language = 'en',
 			directionsServiceBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json',
 		} = props;
