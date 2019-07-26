@@ -86,9 +86,11 @@ class MapViewDirections extends Component {
 			onStart,
 			onReady,
 			onError,
-			mode = 'driving',
+			mode = 'DRIVING',
 			language = 'en',
+			optimizeWaypoints,
 			directionsServiceBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json',
+			region,
 		} = props;
 
 		if (!origin || !destination) {
@@ -111,13 +113,17 @@ class MapViewDirections extends Component {
 				.join('|');
 		}
 
+		if (optimizeWaypoints) {
+			waypoints = `optimize:true|${waypoints}`;
+		}
+
 		onStart && onStart({
 			origin,
 			destination,
 			waypoints: waypoints ? waypoints.split('|') : [],
 		});
 
-		this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language)
+		this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region)
 			.then(result => {
 				if (!this._mounted) return;
 				this.setState(result);
@@ -130,12 +136,12 @@ class MapViewDirections extends Component {
 			});
 	}
 
-	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language) {
+	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region) {
 
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
 		if (typeof (directionsServiceBaseUrl) === 'string') {
-			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode}&language=${language}`;
+			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode.toLowerCase()}&language=${language}&region=${region}&departure_time=now`;
 		}
 
 		return fetch(url)
@@ -156,15 +162,21 @@ class MapViewDirections extends Component {
 							return carry + curr.distance.value;
 						}, 0) / 1000,
 						duration: route.legs.reduce((carry, curr) => {
-							return carry + curr.duration.value;
+							return carry + curr.duration_in_traffic ? curr.duration_in_traffic.value:curr.duration.value;
 						}, 0) / 60,
-                        coordinates: this.decode(route.legs[0].steps),
+            coordinates: this.decode(route.legs[0].steps),
 						fare: route.fare
 					});
 
 				} else {
 					return Promise.reject();
 				}
+			})
+			.catch(err => {
+				console.warn(
+          'react-native-maps-directions Error on GMAPS route request',
+          err
+        );
 			});
 	}
 
@@ -174,14 +186,15 @@ class MapViewDirections extends Component {
 		}
 
 		const {
-			origin, // eslint-disable-line no-unused-lets
-			waypoints, // eslint-disable-line no-unused-lets
-			destination, // eslint-disable-line no-unused-lets
-			apikey, // eslint-disable-line no-unused-lets
-			onReady, // eslint-disable-line no-unused-lets
-			onError, // eslint-disable-line no-unused-lets
-			mode, // eslint-disable-line no-unused-lets
-			language, // eslint-disable-line no-unused-lets
+			origin, // eslint-disable-line no-unused-vars
+			waypoints, // eslint-disable-line no-unused-vars
+			destination, // eslint-disable-line no-unused-vars
+			apikey, // eslint-disable-line no-unused-vars
+			onReady, // eslint-disable-line no-unused-vars
+			onError, // eslint-disable-line no-unused-vars
+			mode, // eslint-disable-line no-unused-vars
+			language, // eslint-disable-line no-unused-vars
+			region,
 			...props
 		} = this.props;
 
@@ -220,10 +233,12 @@ MapViewDirections.propTypes = {
 	onStart: PropTypes.func,
 	onReady: PropTypes.func,
 	onError: PropTypes.func,
-	mode: PropTypes.oneOf(['driving', 'bicycling', 'transit', 'walking']),
+	mode: PropTypes.oneOf(['DRIVING', 'BICYCLING', 'TRANSIT', 'WALKING']),
 	language: PropTypes.string,
 	resetOnChange: PropTypes.bool,
+	optimizeWaypoints: PropTypes.bool,
 	directionsServiceBaseUrl: PropTypes.string,
+	region: PropTypes.string,
 };
 
 export default MapViewDirections;
