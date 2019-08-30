@@ -221,6 +221,10 @@ class Example extends Component {
 export default Example;
 ```
 
+## Example App
+
+An example app can be found in a separate repo, located at [https://github.com/bramus/react-native-maps-directions-example](https://github.com/bramus/react-native-maps-directions-example).
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
