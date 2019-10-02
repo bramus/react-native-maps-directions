@@ -1,5 +1,10 @@
 # `react-native-maps-directions` Changelog
 
+## 1.7.2 - 2019-10-02
+
+- Fix bug where duration was wrongfully calculated when using waypoints
+- Fix bug where not all legs of a route were drawn
+
 ## 1.7.1 - 2019-10-02
 
 - Fall back to standard duration in case “duration with traffic” is not given
