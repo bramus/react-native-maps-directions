@@ -16,28 +16,23 @@ class MapViewDirections extends Component {
 	}
 
 	componentDidMount() {
-		this._mounted = true;
 		this.fetchAndRenderRoute(this.props);
 	}
 
-	componentWillUnmount() {
-		this._mounted = false;
-	}
-
-	componentWillReceiveProps(nextProps) {
-		if (!isEqual(nextProps.origin, this.props.origin) || !isEqual(nextProps.destination, this.props.destination) || !isEqual(nextProps.waypoints, this.props.waypoints) || !isEqual(nextProps.mode, this.props.mode)) {
-			if (nextProps.resetOnChange === false) {
-				this.fetchAndRenderRoute(nextProps);
+	componentDidUpdate(prevProps) {
+		if (!isEqual(prevProps.origin, this.props.origin) || !isEqual(prevProps.destination, this.props.destination) || !isEqual(prevProps.waypoints, this.props.waypoints) || !isEqual(prevProps.mode, this.props.mode)) {
+			if (this.props.resetOnChange === false) {
+				this.fetchAndRenderRoute(this.props);
 			} else {
 				this.resetState(() => {
-					this.fetchAndRenderRoute(nextProps);
+					this.fetchAndRenderRoute(this.props);
 				});
 			}
 		}
 	}
 
 	resetState = (cb = null) => {
-		this._mounted && this.setState({
+		this.setState({
 			coordinates: null,
 			distance: null,
 			duration: null,
@@ -110,7 +105,6 @@ class MapViewDirections extends Component {
 
 		this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region)
 			.then(result => {
-				if (!this._mounted) return;
 				this.setState(result);
 				onReady && onReady(result);
 			})
