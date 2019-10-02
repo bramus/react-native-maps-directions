@@ -156,7 +156,7 @@ class MapViewDirections extends Component {
 							return carry + curr.distance.value;
 						}, 0) / 1000,
 						duration: route.legs.reduce((carry, curr) => {
-							return carry + curr.duration_in_traffic ? curr.duration_in_traffic.value:curr.duration.value;
+							return carry + (curr.duration_in_traffic ? curr.duration_in_traffic.value : curr.duration.value);
 						}, 0) / 60,
             coordinates: this.decode(route.legs[0].steps),
 						fare: route.fare
