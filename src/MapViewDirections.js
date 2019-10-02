@@ -39,7 +39,7 @@ class MapViewDirections extends Component {
 		}, cb);
 	}
 
-	decode(t, e) {
+	decode(t) {
 		let points = [];
 		for (let step of t) {
 			let encoded = step.polyline.points;
@@ -65,7 +65,7 @@ class MapViewDirections extends Component {
 				let dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
 				lng += dlng;
 
-				points.push({ latitude: (lat / 1E5), longitude: (lng / 1E5) })
+				points.push({ latitude: (lat / 1E5), longitude: (lng / 1E5) });
 			}
 		}
 		return points;
@@ -161,13 +161,13 @@ class MapViewDirections extends Component {
 						}, 0) / 60,
 						coordinates: (
 							(precision === 'low') ?
-							this.decode([{polyline: route.overview_polyline}]) :
-							route.legs.reduce((carry, curr) => {
-								return [
-									...carry,
-									...this.decode(curr.steps),
-								];
-							}, [])
+								this.decode([{polyline: route.overview_polyline}]) :
+								route.legs.reduce((carry, curr) => {
+									return [
+										...carry,
+										...this.decode(curr.steps),
+									];
+								}, [])
 						),
 						fare: route.fare,
 					});
@@ -177,10 +177,7 @@ class MapViewDirections extends Component {
 				}
 			})
 			.catch(err => {
-				console.warn(
-					'react-native-maps-directions Error on GMAPS route request',
-					err
-				);
+				console.warn('react-native-maps-directions Error on GMAPS route request', err);  // eslint-disable-line no-console
 			});
 	}
 
@@ -198,7 +195,8 @@ class MapViewDirections extends Component {
 			onError, // eslint-disable-line no-unused-vars
 			mode, // eslint-disable-line no-unused-vars
 			language, // eslint-disable-line no-unused-vars
-			region,
+			region, // eslint-disable-line no-unused-vars
+			precision,  // eslint-disable-line no-unused-vars
 			...props
 		} = this.props;
 
