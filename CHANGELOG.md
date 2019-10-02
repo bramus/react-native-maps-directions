@@ -1,8 +1,18 @@
 # `react-native-maps-directions` Changelog
 
-## 1.7.0 - 2018-08-14
+## 1.7.1 - 2019-10-02
+
+- Fall back to standard duration in case “duration with traffic” is not given
+- Use “Steps polyline”, instead of “Overview polyline” (regression fix)
+- Update dependencies
+
+## 1.7.0 - 2019-05-17
 
 - Add `optimizeWaypoints` prop to allow use of waypoints optimization.
+- Add `region` prop.
+- Return “Duration with traffic” as `duration`
+- Return `fare` in `onReady`
+
 
 ## 1.6.0 - 2018-03-09
 
