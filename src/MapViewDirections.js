@@ -40,35 +40,35 @@ class MapViewDirections extends Component {
 	}
 
 	decode(t, e) {
-        let points = [];
-        for (let step of t) {
-            let encoded = step.polyline.points;
-            let index = 0, len = encoded.length;
-            let lat = 0, lng = 0;
-            while (index < len) {
-                let b, shift = 0, result = 0;
-                do {
-                    b = encoded.charAt(index++).charCodeAt(0) - 63;//finds ascii                                                                                    //and substract it by 63
-                    result |= (b & 0x1f) << shift;
-                    shift += 5;
-                } while (b >= 0x20);
+		let points = [];
+		for (let step of t) {
+			let encoded = step.polyline.points;
+			let index = 0, len = encoded.length;
+			let lat = 0, lng = 0;
+			while (index < len) {
+				let b, shift = 0, result = 0;
+				do {
+					b = encoded.charAt(index++).charCodeAt(0) - 63;
+					result |= (b & 0x1f) << shift;
+					shift += 5;
+				} while (b >= 0x20);
 
-                let dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-                lat += dlat;
-                shift = 0;
-                result = 0;
-                do {
-                    b = encoded.charAt(index++).charCodeAt(0) - 63;
-                    result |= (b & 0x1f) << shift;
-                    shift += 5;
-                } while (b >= 0x20);
-                let dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-                lng += dlng;
+				let dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+				lat += dlat;
+				shift = 0;
+				result = 0;
+				do {
+					b = encoded.charAt(index++).charCodeAt(0) - 63;
+					result |= (b & 0x1f) << shift;
+					shift += 5;
+				} while (b >= 0x20);
+				let dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+				lng += dlng;
 
-                points.push({ latitude: (lat / 1E5), longitude: (lng / 1E5) })
-            }
-        }
-        return points;
+				points.push({ latitude: (lat / 1E5), longitude: (lng / 1E5) })
+			}
+		}
+		return points;
 	}
 
 	fetchAndRenderRoute = (props) => {
@@ -158,7 +158,7 @@ class MapViewDirections extends Component {
 						duration: route.legs.reduce((carry, curr) => {
 							return carry + (curr.duration_in_traffic ? curr.duration_in_traffic.value : curr.duration.value);
 						}, 0) / 60,
-            coordinates: this.decode(route.legs[0].steps),
+						coordinates: this.decode(route.legs[0].steps),
 						fare: route.fare
 					});
 
@@ -168,9 +168,9 @@ class MapViewDirections extends Component {
 			})
 			.catch(err => {
 				console.warn(
-          'react-native-maps-directions Error on GMAPS route request',
-          err
-        );
+					'react-native-maps-directions Error on GMAPS route request',
+					err
+				);
 			});
 	}
 
