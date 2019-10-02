@@ -1,0 +1,27 @@
+name: Format (eslint)
+
+on:
+  pull_request:
+    paths:
+      - '**.js'
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Install
+        run: yarn --non-interactive --silent --ignore-scripts --production=false install
+        env:
+          CI: true
+
+      - name: Run prettier
+        run: yarn lint --fix
+
+      - uses: stefanzweifel/git-auto-commit-action@v2.1.0
+        with:
+          commit_message: "🚨 Fix Lint Errors"
+          branch: ${{ github.head_ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
