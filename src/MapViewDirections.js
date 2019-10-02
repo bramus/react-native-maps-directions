@@ -5,7 +5,7 @@ import isEqual from 'lodash.isequal';
 
 class MapViewDirections extends Component {
 
-    constructor(props) {
+	constructor(props) {
 		super(props);
 
 		this.state = {
@@ -40,7 +40,7 @@ class MapViewDirections extends Component {
 	}
 
 	decode(t) {
-		let points = []
+		let points = [];
 		for (let step of t) {
 			let encoded = step.polyline.points;
 			let index = 0, len = encoded.length;
@@ -161,7 +161,7 @@ class MapViewDirections extends Component {
 						}, 0) / 60,
 						coordinates: (
 							(precision === 'low')
-							?
+								?
 								this.decode([{polyline: route.overview_polyline}]) :
 								route.legs.reduce((carry, curr) => {
 									return [
