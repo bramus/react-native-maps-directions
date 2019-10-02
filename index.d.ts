@@ -35,6 +35,10 @@ declare module "react-native-maps-directions" {
     | "TRANSIT"
     | "WALKING";
 
+  export type MapViewDirectionsPrecision =
+    | "high"
+    | "low";
+
   export interface MapViewDirectionsProps {
     /**
      * The origin location to start routing from.
@@ -69,6 +73,12 @@ declare module "react-native-maps-directions" {
      * Allowed values are "DRIVING", "BICYCLING", "WALKING", and "TRANSIT".
      */
     mode?: MapViewDirectionsMode;
+    /**
+     * The precision to draw the polyline with.
+     * Allowed values are "high", and "low".
+     * Defaults to "low"
+     */
+    precision?: MapViewDirectionsPrecision;
     /**
      * The language to use when calculating directions.
      */

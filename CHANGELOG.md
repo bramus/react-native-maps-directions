@@ -1,5 +1,9 @@
 # `react-native-maps-directions` Changelog
 
+## 1.7.3 - 2019-10-02
+
+- Add `precision` prop to allow one to choose between the ”Steps Polyline” and “Overview Polyline”
+
 ## 1.7.2 - 2019-10-02
 
 - Fix bug where duration was wrongfully calculated when using waypoints

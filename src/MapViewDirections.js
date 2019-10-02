@@ -20,7 +20,7 @@ class MapViewDirections extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (!isEqual(prevProps.origin, this.props.origin) || !isEqual(prevProps.destination, this.props.destination) || !isEqual(prevProps.waypoints, this.props.waypoints) || !isEqual(prevProps.mode, this.props.mode)) {
+		if (!isEqual(prevProps.origin, this.props.origin) || !isEqual(prevProps.destination, this.props.destination) || !isEqual(prevProps.waypoints, this.props.waypoints) || !isEqual(prevProps.mode, this.props.mode) || !isEqual(prevProps.precision, this.props.precision)) {
 			if (this.props.resetOnChange === false) {
 				this.fetchAndRenderRoute(this.props);
 			} else {
@@ -86,6 +86,7 @@ class MapViewDirections extends Component {
 			optimizeWaypoints,
 			directionsServiceBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json',
 			region,
+			precision = 'low',
 		} = props;
 
 		if (!origin || !destination) {
@@ -118,7 +119,7 @@ class MapViewDirections extends Component {
 			waypoints: waypoints ? waypoints.split('|') : [],
 		});
 
-		this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region)
+		this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision)
 			.then(result => {
 				this.setState(result);
 				onReady && onReady(result);
@@ -130,7 +131,7 @@ class MapViewDirections extends Component {
 			});
 	}
 
-	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region) {
+	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision) {
 
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
@@ -158,12 +159,16 @@ class MapViewDirections extends Component {
 						duration: route.legs.reduce((carry, curr) => {
 							return carry + (curr.duration_in_traffic ? curr.duration_in_traffic.value : curr.duration.value);
 						}, 0) / 60,
-						coordinates: route.legs.reduce((carry, curr) => {
-							return [
-								...carry,
-								...this.decode(curr.steps),
-							];
-						}, []),
+						coordinates: (
+							(precision === 'low') ?
+							this.decode([{polyline: route.overview_polyline}]) :
+							route.legs.reduce((carry, curr) => {
+								return [
+									...carry,
+									...this.decode(curr.steps),
+								];
+							}, [])
+						),
 						fare: route.fare,
 					});
 
@@ -238,6 +243,7 @@ MapViewDirections.propTypes = {
 	optimizeWaypoints: PropTypes.bool,
 	directionsServiceBaseUrl: PropTypes.string,
 	region: PropTypes.string,
+	precision: PropTypes.oneOf(['high', 'low']),
 };
 
 export default MapViewDirections;
