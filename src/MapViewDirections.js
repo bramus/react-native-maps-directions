@@ -39,7 +39,7 @@ class MapViewDirections extends Component {
 		}, cb);
 	}
 
-	decode(t) {
+	decode(t, e) {
 		let points = [];
 		for (let step of t) {
 			let encoded = step.polyline.points;
