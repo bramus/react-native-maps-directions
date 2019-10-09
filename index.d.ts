@@ -1,4 +1,4 @@
-declare module "react-native-maps-directions" {
+declare module 'react-native-maps-directions' {
   // Type definitions for react-native-maps-directions 1.6
   // Project: https://github.com/bramus/react-native-maps-directions
   // Definitions by: Ali Oguzhan Yildiz <https://github.com/alioguzhan>
@@ -6,129 +6,143 @@ declare module "react-native-maps-directions" {
   // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
   // TypeScript Version: 3.3
 
-  import * as React from "react";
+  import * as React from 'react'
+
+  export interface LatLng {
+    latitude: number
+    longitude: number
+  }
+
+  interface IRoute {
+    overview_polyline: {
+      points: number[]
+    }
+  }
+
+  export function getDirectionsFromMapKit(
+    origin: LatLng,
+    destination: LatLng
+  ): Promise<IRoute[]>
 
   export type MapViewDirectionsOrigin =
     | string
     | {
-        latitude: number;
-        longitude: number;
-      };
+        latitude: number
+        longitude: number
+      }
 
   export type MapViewDirectionsWaypoints =
     | string
     | {
-        latitude: number;
-        longitude: number;
-      };
+        latitude: number
+        longitude: number
+      }
 
   export type MapViewDirectionsDestination =
     | string
     | {
-        latitude: number;
-        longitude: number;
-      };
+        latitude: number
+        longitude: number
+      }
 
   export type MapViewDirectionsMode =
-    | "DRIVING"
-    | "BICYCLING"
-    | "TRANSIT"
-    | "WALKING";
+    | 'DRIVING'
+    | 'BICYCLING'
+    | 'TRANSIT'
+    | 'WALKING'
 
-  export type MapViewDirectionsPrecision =
-    | "high"
-    | "low";
+  export type MapViewDirectionsPrecision = 'high' | 'low'
 
   export interface MapViewDirectionsProps {
     /**
      * The origin location to start routing from.
      */
-    origin?: MapViewDirectionsOrigin;
+    origin?: MapViewDirectionsOrigin
     /**
      * Array of waypoints to use between origin and destination.
      */
-    waypoints?: MapViewDirectionsWaypoints[];
+    waypoints?: MapViewDirectionsWaypoints[]
     /**
      * The destination location to start routing to.
      */
-    destination?: MapViewDirectionsDestination;
+    destination?: MapViewDirectionsDestination
     /**
      * Your Google Maps API Key
      */
-    apikey: string;
+    apikey: string
     /**
      * Callback that is called when the routing has started.
      */
-    onStart?: (...args: any[]) => any;
+    onStart?: (...args: any[]) => any
     /**
      * Callback that is called when the routing has succesfully finished.
      */
-    onReady?: (...args: any[]) => any;
+    onReady?: (...args: any[]) => any
     /**
      * Callback that is called in case the routing has failed.
      */
-    onError?: (...args: any[]) => any;
+    onError?: (...args: any[]) => any
     /**
      * Which transportation mode to use when calculating directions.
      * Allowed values are "DRIVING", "BICYCLING", "WALKING", and "TRANSIT".
      */
-    mode?: MapViewDirectionsMode;
+    mode?: MapViewDirectionsMode
     /**
      * The precision to draw the polyline with.
      * Allowed values are "high", and "low".
      * Defaults to "low"
      */
-    precision?: MapViewDirectionsPrecision;
+    precision?: MapViewDirectionsPrecision
     /**
      * The language to use when calculating directions.
      */
-    language?: string;
+    language?: string
     /**
      * Tweak if the rendered MapView. Polyline should reset or not
      * when calculating the route between origin and destionation.
      * Set to false if you see the directions line glitching.
      */
-    resetOnChange?: boolean;
+    resetOnChange?: boolean
     /**
      * Set it to true if you would like Google Maps to re-order all the
      * waypoints to optimize the route for the fastest route.
      * Please be aware that if this option is enabled,
      * you will be billed for a higher rate by Google
      */
-    optimizeWaypoints?: boolean;
+    optimizeWaypoints?: boolean
     /**
      * Base URL of the Directions Service (API) you are using.
      * By default the Google Directions API is used
      * ("https://maps.googleapis.com/maps/api/directions/json").
      * Usually you won't need to change this.
      */
-    directionsServiceBaseUrl?: string;
+    directionsServiceBaseUrl?: string
     /**
      * If you are using strings for origin or destination,
      * sometimes you will get an incorrect route because
      * Google Maps API needs the region where this places belong to.
      */
-    region?: string;
+    region?: string
     /**
      * @number
      * The stroke width to use for the path - the line displayed
      * by polyline between two navigation points.
      * Default: 1
      */
-    strokeWidth?: number;
+    strokeWidth?: number
     /**
      * @string
      * The stroke color to use for the path.
      * Default: "#000"
      */
-    strokeColor?: string;
+    strokeColor?: string
     /**
      * @Array
      * The stroke colors to use for the path (iOS only).
      * Must be the same length as coordinates.
      * Default: null
      */
-    strokeColors?: Array<string>;
+    strokeColors?: Array<string>
     /**
      * @string
      * The line cap style to apply to the open ends of the path.
@@ -136,14 +150,14 @@ declare module "react-native-maps-directions" {
      * Note: lineCap is not yet supported for GoogleMaps provider on iOS.
      * Default: "round"
      */
-    lineCap?: string;
+    lineCap?: string
     /**
      * @string
      * The line join style to apply to corners of the path.
      * Possible values are miter, round or bevel.
      * Default: "round"
      */
-    lineJoin?: string;
+    lineJoin?: string
     /**
      * @number
      * The limiting value that helps avoid spikes at junctions
@@ -154,7 +168,7 @@ declare module "react-native-maps-directions" {
      * to a bevel join. The default miter limit is 10, which results in the
      * conversion of miters whose angle at the joint is less than 11 degrees.
      */
-    miterLimit?: number;
+    miterLimit?: number
     /**
      * @boolean
      * Boolean to indicate whether to draw each segment of the line as a geodesic
@@ -162,7 +176,7 @@ declare module "react-native-maps-directions" {
      * shortest path between two points on the Earth's surface.
      * The geodesic curve is constructed assuming the Earth is a sphere.
      */
-    geodesic?: boolean;
+    geodesic?: boolean
     /**
      * @number
      * (iOS only) The offset (in points) at which to start drawing the
@@ -171,7 +185,7 @@ declare module "react-native-maps-directions" {
      * the patter 5-2-3-2 would cause drawing to begin in the middle of the first gap.
      * Default: 0
      */
-    lineDashPhase?: number;
+    lineDashPhase?: number
     /**
      * @Array
      * An array of numbers specifying the dash pattern to use for the path.
@@ -181,18 +195,18 @@ declare module "react-native-maps-directions" {
      * followed by the second line segment length, and so on.
      * Default: null
      */
-    lineDashPattern?: Array<number>;
+    lineDashPattern?: Array<number>
     /**
      * @boolean
      * Boolean to allow a polyline to be tappable and use the onPress function.
      */
-    tappable?: boolean;
+    tappable?: boolean
   }
 
   export default class MapViewDirections extends React.Component<
     MapViewDirectionsProps,
     any
   > {
-    render(): JSX.Element;
+    render(): JSX.Element
   }
 }
