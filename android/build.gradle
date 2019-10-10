@@ -74,12 +74,10 @@ def configureReactNativePom(def pom) {
         version = packageJson.version
         group = "com.reactlibrary"
         description packageJson.description
-        url packageJson.repository.baseUrl
 
         licenses {
             license {
                 name packageJson.license
-                url packageJson.repository.baseUrl + '/blob/master/' + packageJson.licenseFilename
                 distribution 'repo'
             }
         }
