@@ -308,6 +308,7 @@ MapViewDirections.propTypes = {
 	language: PropTypes.string,
 	resetOnChange: PropTypes.bool,
 	optimizeWaypoints: PropTypes.bool,
+	splitWaypoints: PropTypes.bool,
 	directionsServiceBaseUrl: PropTypes.string,
 	region: PropTypes.string,
 	precision: PropTypes.oneOf(['high', 'low']),
