@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import MapView from 'react-native-maps';
 import isEqual from 'lodash.isequal';
 
+const WAYPOINT_LIMIT = 10;
+
 class MapViewDirections extends Component {
 
 	constructor(props) {
@@ -74,9 +76,9 @@ class MapViewDirections extends Component {
 	fetchAndRenderRoute = (props) => {
 
 		let {
-			origin,
-			destination,
-			waypoints,
+			origin: initialOrigin,
+			destination: initialDestination,
+			waypoints: initialWaypoints,
 			apikey,
 			onStart,
 			onReady,
@@ -84,51 +86,118 @@ class MapViewDirections extends Component {
 			mode = 'DRIVING',
 			language = 'en',
 			optimizeWaypoints,
+			splitWaypoints,
 			directionsServiceBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json',
 			region,
 			precision = 'low',
 		} = props;
 
-		if (!origin || !destination) {
+		if (!initialOrigin || !initialDestination) {
 			return;
 		}
 
-		if (origin.latitude && origin.longitude) {
-			origin = `${origin.latitude},${origin.longitude}`;
-		}
+		let routes = [];
 
-		if (destination.latitude && destination.longitude) {
-			destination = `${destination.latitude},${destination.longitude}`;
-		}
+		if (splitWaypoints) {
+			let part = -1;
 
-		if (!waypoints || !waypoints.length) {
-			waypoints = '';
+			routes = [initialOrigin, ...initialWaypoints, initialDestination].reduce((acc, waypoint, index) => {
+				if (index % WAYPOINT_LIMIT === 0) {
+					part += 1;
+					acc.push([]);
+					acc[part].routeId = part;
+					acc[part].origin = part === 0 ? waypoint : acc[part - 1].destination;
+				} else if (index % WAYPOINT_LIMIT === WAYPOINT_LIMIT - 1) {
+					acc[part].destination = waypoint;
+				} else {
+					acc[part].push(waypoint);
+				}
+
+				return acc;
+			}, []);
+
+			if (!routes[part].destination) {
+				routes[part].destination = routes[part].pop();
+			}
 		} else {
-			waypoints = waypoints
-				.map(waypoint => (waypoint.latitude && waypoint.longitude) ? `${waypoint.latitude},${waypoint.longitude}` : waypoint)
-				.join('|');
+			routes.push(initialWaypoints);
+			routes[0].origin = initialOrigin;
+			routes[0].destination = initialDestination;
 		}
 
-		if (optimizeWaypoints) {
-			waypoints = `optimize:true|${waypoints}`;
-		}
+		Promise.all(routes.map((waypoints, index) => {
+			let origin = waypoints.origin;
+			let destination = waypoints.destination;
 
-		onStart && onStart({
-			origin,
-			destination,
-			waypoints: waypoints ? waypoints.split('|') : [],
+			if (origin.latitude && origin.longitude) {
+				origin = `${origin.latitude},${origin.longitude}`;
+			}
+
+			if (destination.latitude && destination.longitude) {
+				destination = `${destination.latitude},${destination.longitude}`;
+			}
+
+			if (!waypoints || !waypoints.length) {
+				waypoints = '';
+			} else {
+				waypoints = waypoints
+					.map(waypoint => (waypoint.latitude && waypoint.longitude) ? `${waypoint.latitude},${waypoint.longitude}` : waypoint)
+					.join('|');
+			}
+
+			if (optimizeWaypoints) {
+				waypoints = `optimize:true|${waypoints}`;
+			}
+
+			if (index === 0) {
+				onStart && onStart({
+					origin,
+					destination,
+					waypoints: [].concat(...routes),
+				});
+			}
+
+			return (
+				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision)
+					.then(result => {
+						const { coordinates, distance, duration } = this.state;
+
+						this.setState({
+							coordinates: coordinates ? [...coordinates, ...result.coordinates] : result.coordinates,
+							distance: distance ? distance + result.distance : result.distance,
+							duration: duration ? duration + result.duration : result.duration,
+						});
+
+						return result;
+					})
+					.catch(errorMessage => {
+						this.resetState();
+						console.warn(`MapViewDirections Error: ${errorMessage}`); // eslint-disable-line no-console
+						onError && onError(errorMessage);
+					})
+			);
+		})).then(results => {
+			if (onReady) {
+				onReady(
+					results.reduce((acc, { distance, duration, coordinates, fare }) => {
+						acc.coordinates = [
+							...coordinates,
+							...acc.coordinates,
+						];
+						acc.distance += distance;
+						acc.duration += duration;
+						acc.fares = [...acc.fares, fare];
+
+						return acc;
+					}, {
+						coordinates: [],
+						distance: 0,
+						duration: 0,
+						fares: [],
+					})
+				);
+			}
 		});
-
-		this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision)
-			.then(result => {
-				this.setState(result);
-				onReady && onReady(result);
-			})
-			.catch(errorMessage => {
-				this.resetState();
-				console.warn(`MapViewDirections Error: ${errorMessage}`); // eslint-disable-line no-console
-				onError && onError(errorMessage);
-			});
 	}
 
 	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision) {
