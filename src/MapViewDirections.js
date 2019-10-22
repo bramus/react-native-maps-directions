@@ -105,7 +105,7 @@ class MapViewDirections extends Component {
 				if (index % WAYPOINT_LIMIT === 0) {
 					part += 1;
 					acc.push([]);
-					acc[part].routeId = part;
+					acc[part].id = part;
 					acc[part].origin = part === 0 ? waypoint : acc[part - 1].destination;
 				} else if (index % WAYPOINT_LIMIT === WAYPOINT_LIMIT - 1) {
 					acc[part].destination = waypoint;
@@ -121,13 +121,14 @@ class MapViewDirections extends Component {
 			}
 		} else {
 			routes.push(initialWaypoints);
+			routes[0].id = 0;
 			routes[0].origin = initialOrigin;
 			routes[0].destination = initialDestination;
 		}
 
-		Promise.all(routes.map((waypoints, index) => {
-			let origin = waypoints.origin;
-			let destination = waypoints.destination;
+		Promise.all(routes.map((route, index) => {
+			let origin = route.origin;
+			let destination = route.destination;
 
 			if (origin.latitude && origin.longitude) {
 				origin = `${origin.latitude},${origin.longitude}`;
@@ -137,13 +138,9 @@ class MapViewDirections extends Component {
 				destination = `${destination.latitude},${destination.longitude}`;
 			}
 
-			if (!waypoints || !waypoints.length) {
-				waypoints = '';
-			} else {
-				waypoints = waypoints
-					.map(waypoint => (waypoint.latitude && waypoint.longitude) ? `${waypoint.latitude},${waypoint.longitude}` : waypoint)
-					.join('|');
-			}
+			let waypoints = route
+				.map(waypoint => (waypoint.latitude && waypoint.longitude) ? `${waypoint.latitude},${waypoint.longitude}` : waypoint)
+				.join('|');
 
 			if (optimizeWaypoints) {
 				waypoints = `optimize:true|${waypoints}`;
@@ -160,13 +157,16 @@ class MapViewDirections extends Component {
 			return (
 				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision)
 					.then(result => {
-						const { coordinates, distance, duration } = this.state;
+						if (result) {
+							const { coordinates, distance, duration } = this.state;
+							result.coordinates.id = route.id;
 
-						this.setState({
-							coordinates: coordinates ? [...coordinates, ...result.coordinates] : result.coordinates,
-							distance: distance ? distance + result.distance : result.distance,
-							duration: duration ? duration + result.duration : result.duration,
-						});
+							this.setState({
+								coordinates: coordinates ? [...coordinates, result.coordinates] : [result.coordinates],
+								distance: distance ? distance + result.distance : result.distance,
+								duration: duration ? duration + result.duration : result.duration,
+							});
+						}
 
 						return result;
 					})
@@ -251,13 +251,16 @@ class MapViewDirections extends Component {
 	}
 
 	render() {
-		if (!this.state.coordinates) {
+		const { coordinates } = this.state;
+
+		if (!coordinates) {
 			return null;
 		}
 
 		const {
 			origin, // eslint-disable-line no-unused-vars
 			waypoints, // eslint-disable-line no-unused-vars
+			splitWaypoints, // eslint-disable-line no-unused-vars
 			destination, // eslint-disable-line no-unused-vars
 			apikey, // eslint-disable-line no-unused-vars
 			onReady, // eslint-disable-line no-unused-vars
@@ -269,9 +272,7 @@ class MapViewDirections extends Component {
 			...props
 		} = this.props;
 
-		return (
-			<MapView.Polyline coordinates={this.state.coordinates} {...props} />
-		);
+		return coordinates.map((data) => <MapView.Polyline key={data.id} coordinates={data} {...props} />);
 	}
 
 }
