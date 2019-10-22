@@ -97,6 +97,13 @@ declare module "react-native-maps-directions" {
      */
     optimizeWaypoints?: boolean;
     /**
+     * Directions API has a limit of 10 or 25 (depends on the billing plan)
+     * waypoints per route. So waypoints array size is limited to those numbers.
+     * Set this to true if you would like to automatically split waypoints to
+     * multiple routes and by that avoid waypoints limit.
+     */
+    splitWaypoints?: boolean;
+    /**
      * Base URL of the Directions Service (API) you are using.
      * By default the Google Directions API is used
      * ("https://maps.googleapis.com/maps/api/directions/json").
