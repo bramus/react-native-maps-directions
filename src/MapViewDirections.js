@@ -169,8 +169,8 @@ class MapViewDirections extends Component {
 			// Combine all Directions API Request results into one
 			const result = results.reduce((acc, { distance, duration, coordinates, fare }) => {
 				acc.coordinates = [
-					...coordinates,
 					...acc.coordinates,
+					...coordinates,
 				];
 				acc.distance += distance;
 				acc.duration += duration;
