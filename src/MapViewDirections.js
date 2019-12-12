@@ -95,40 +95,50 @@ class MapViewDirections extends Component {
 		if (!initialOrigin || !initialDestination) {
 			return;
 		}
+		
+		// Routes array which we'll be filling.
+		// We'll perform a Directions API Request for reach route
+		const routes = [];
 
-		let routes = [];
-
-		if (splitWaypoints) {
-			let part = -1;
-
-			routes = [initialOrigin, ...initialWaypoints, initialDestination].reduce((acc, waypoint, index) => {
-				if (index % WAYPOINT_LIMIT === 0) {
-					part += 1;
-					acc.push([]);
-					acc[part].id = part;
-					acc[part].origin = part === 0 ? waypoint : acc[part - 1].destination;
-				} else if (index % WAYPOINT_LIMIT === WAYPOINT_LIMIT - 1) {
-					acc[part].destination = waypoint;
-				} else {
-					acc[part].push(waypoint);
-				}
-
-				return acc;
+		// We need to split the waypoints in chunks, in order to not exceede the max waypoint limit
+		// ~> Chunk up the waypoints, yielding multiple routes
+		if (splitWaypoints && initialWaypoints && initialWaypoints.length > WAYPOINT_LIMIT) {
+			// Split up waypoints in chunks with chunksize WAYPOINT_LIMIT
+			const chunckedWaypoints = initialWaypoints.reduce((accumulator, waypoint, index) => {
+				const numChunk = Math.floor(index / WAYPOINT_LIMIT); 
+				accumulator[numChunk] = [].concat((accumulator[numChunk] || []), waypoint); 
+				return accumulator;
 			}, []);
 
-			if (!routes[part].destination) {
-				routes[part].destination = routes[part].pop();
-			}
-		} else {
-			routes.push(initialWaypoints);
-			routes[0].id = 'singleWaypoint';
-			routes[0].origin = initialOrigin;
-			routes[0].destination = initialDestination;
+			// Create routes for each chunk, using:
+			// - Endpoints of previous chunks as startpoints for the route (except for the first chunk, which uses initialOrigin)
+			// - Startpoints of next chunks as endpoints for the route (except for the last chunk, which uses initialDestination)
+			 for (let i = 0; i < chunckedWaypoints.length; i++) {
+				routes.push({
+					waypoints: chunckedWaypoints[i],
+					origin: (i === 0) ? initialOrigin : chunckedWaypoints[i-1][chunckedWaypoints[i-1].length - 1],
+					destination: (i === chunckedWaypoints.length - 1) ? initialDestination : chunckedWaypoints[i+1][0],
+				});
+			 }
+		}
+		
+		// No splitting of the waypoints is requested/needed.
+		// ~> Use one single route
+		else {
+			routes.push({
+				waypoints: initialWaypoints,
+				origin: initialOrigin,
+				destination: initialDestination,
+			});
 		}
 
+		// Perform a Directions API Request for each route
 		Promise.all(routes.map((route, index) => {
-			let origin = route.origin;
-			let destination = route.destination;
+			let {
+				origin,
+				destination,
+				waypoints
+			} = route;
 
 			if (origin.latitude && origin.longitude) {
 				origin = `${origin.latitude},${origin.longitude}`;
@@ -138,7 +148,7 @@ class MapViewDirections extends Component {
 				destination = `${destination.latitude},${destination.longitude}`;
 			}
 
-			let waypoints = route
+			waypoints = waypoints
 				.map(waypoint => (waypoint.latitude && waypoint.longitude) ? `${waypoint.latitude},${waypoint.longitude}` : waypoint)
 				.join('|');
 
@@ -150,7 +160,7 @@ class MapViewDirections extends Component {
 				onStart && onStart({
 					origin,
 					destination,
-					waypoints: [].concat(...routes),
+					waypoints: initialWaypoints,
 				});
 			}
 
