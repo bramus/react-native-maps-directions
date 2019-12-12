@@ -113,13 +113,13 @@ class MapViewDirections extends Component {
 			// Create routes for each chunk, using:
 			// - Endpoints of previous chunks as startpoints for the route (except for the first chunk, which uses initialOrigin)
 			// - Startpoints of next chunks as endpoints for the route (except for the last chunk, which uses initialDestination)
-			 for (let i = 0; i < chunckedWaypoints.length; i++) {
+			for (let i = 0; i < chunckedWaypoints.length; i++) {
 				routes.push({
 					waypoints: chunckedWaypoints[i],
 					origin: (i === 0) ? initialOrigin : chunckedWaypoints[i-1][chunckedWaypoints[i-1].length - 1],
 					destination: (i === chunckedWaypoints.length - 1) ? initialDestination : chunckedWaypoints[i+1][0],
 				});
-			 }
+			}
 		}
 		
 		// No splitting of the waypoints is requested/needed.
@@ -137,7 +137,7 @@ class MapViewDirections extends Component {
 			let {
 				origin,
 				destination,
-				waypoints
+				waypoints,
 			} = route;
 
 			if (origin.latitude && origin.longitude) {
@@ -186,7 +186,7 @@ class MapViewDirections extends Component {
 				acc.duration += duration;
 				acc.fares = [
 					...acc.fares,
-					fare
+					fare,
 				];
 
 				return acc;
@@ -199,7 +199,7 @@ class MapViewDirections extends Component {
 
 			// Plot it out and call the onReady callback
 			this.setState({
-				coordinates: result.coordinates
+				coordinates: result.coordinates,
 			}, function() {
 				if (onReady) {
 					onReady(result);
