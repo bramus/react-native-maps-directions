@@ -157,17 +157,6 @@ class MapViewDirections extends Component {
 			return (
 				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision)
 					.then(result => {
-						if (result) {
-							const { coordinates, distance, duration } = this.state;
-							result.coordinates.id = route.id;
-
-							this.setState({
-								coordinates: coordinates ? [...coordinates, result.coordinates] : [result.coordinates],
-								distance: distance ? distance + result.distance : result.distance,
-								duration: duration ? duration + result.duration : result.duration,
-							});
-						}
-
 						return result;
 					})
 					.catch(errorMessage => {
@@ -177,26 +166,35 @@ class MapViewDirections extends Component {
 					})
 			);
 		})).then(results => {
-			if (onReady) {
-				onReady(
-					results.reduce((acc, { distance, duration, coordinates, fare }) => {
-						acc.coordinates = [
-							...coordinates,
-							...acc.coordinates,
-						];
-						acc.distance += distance;
-						acc.duration += duration;
-						acc.fares = [...acc.fares, fare];
+			// Combine all Directions API Request results into one
+			const result = results.reduce((acc, { distance, duration, coordinates, fare }) => {
+				acc.coordinates = [
+					...coordinates,
+					...acc.coordinates,
+				];
+				acc.distance += distance;
+				acc.duration += duration;
+				acc.fares = [
+					...acc.fares,
+					fare
+				];
 
-						return acc;
-					}, {
-						coordinates: [],
-						distance: 0,
-						duration: 0,
-						fares: [],
-					})
-				);
-			}
+				return acc;
+			}, {
+				coordinates: [],
+				distance: 0,
+				duration: 0,
+				fares: [],
+			});
+
+			// Plot it out and call the onReady callback
+			this.setState({
+				coordinates: result.coordinates
+			}, function() {
+				if (onReady) {
+					onReady(result);
+				}
+			});
 		});
 	}
 
@@ -272,7 +270,9 @@ class MapViewDirections extends Component {
 			...props
 		} = this.props;
 
-		return coordinates.map((data) => <MapView.Polyline key={data.id} coordinates={data} {...props} />);
+		return (
+			<MapView.Polyline coordinates={coordinates} {...props} />
+		);
 	}
 
 }
