@@ -144,7 +144,7 @@ class MapViewDirections extends Component {
 			.then(json => {
 
 				if (json.status !== 'OK') {
-					const errorMessage = json.error_message || 'Unknown error';
+					const errorMessage = json.error_message || json.status || 'Unknown error';
 					return Promise.reject(errorMessage);
 				}
 
