@@ -246,7 +246,8 @@ class MapViewDirections extends Component {
 									];
 								}, [])
 						),
-						fare: route.fare,
+            fare: route.fare,
+            waypointOrder: route.waypoint_order
 					});
 
 				} else {
