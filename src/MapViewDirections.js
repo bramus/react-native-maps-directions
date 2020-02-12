@@ -165,7 +165,7 @@ class MapViewDirections extends Component {
 			}
 
 			return (
-				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision)
+				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, onError)
 					.then(result => {
 						return result;
 					})
@@ -208,7 +208,7 @@ class MapViewDirections extends Component {
 		});
 	}
 
-	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision) {
+	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, onError) {
 
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
@@ -255,6 +255,7 @@ class MapViewDirections extends Component {
 			})
 			.catch(err => {
 				console.warn('react-native-maps-directions Error on GMAPS route request', err);  // eslint-disable-line no-console
+				onError && onError(err);
 			});
 	}
 
