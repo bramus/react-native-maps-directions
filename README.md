@@ -198,8 +198,8 @@ class Example extends Component {
               console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
             }}
             onReady={result => {
-              console.log('Distance: ${result.distance} km')
-              console.log('Duration: ${result.duration} min.')
+              console.log(`Distance: ${result.distance} km`)
+              console.log(`Duration: ${result.duration} min.`)
 
               this.mapView.fitToCoordinates(result.coordinates, {
                 edgePadding: {
