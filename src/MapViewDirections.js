@@ -196,7 +196,7 @@ class MapViewDirections extends Component {
 				distance: 0,
 				duration: 0,
 				fares: [],
-				waypointOrder: []
+				waypointOrder: [] 
 			});
 
 			// Plot it out and call the onReady callback
