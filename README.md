@@ -70,7 +70,8 @@ Once the directions in between `destination` and `origin` has been fetched, a `M
 | `directionsServiceBaseUrl` | `string` | _(Google's)_ | Base URL of the Directions Service (API) you are using. By default the Google Directions API is used (`"https://maps.googleapis.com/maps/api/directions/json"`). Usually you won't need to change this.
 | `region` | `String` | | If you are using strings for **origin** or **destination**, sometimes you will get an incorrect route because Google Maps API needs the region where this places belong to. See [here](https://developers.google.com/maps/documentation/javascript/localization#Region) for more info.
 | `precision` | `String` | `"low"` | The precision level of detail of the drawn polyline. Allowed values are "high", and "low". Setting to "low" will yield a polyline that is an approximate (smoothed) path of the resulting directions. Setting to "high" may cause a hit in performance in case a complex route is returned.
-
+| `timePrecision` | `String` | `"none"` | The timePrecision to get Realtime traffic info. Allowed values are "none", and "now". Defaults to "none".
+| `channel` | `String` | | If you include the channel parameter in your requests, you can generate a Successful Requests report that shows a breakdown of your application's API requests across different applications that use the same client ID (such as externally facing access vs. internally facing access).
 #### More props
 
 Since the result rendered on screen is a `MapView.Polyline` component, all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted.
