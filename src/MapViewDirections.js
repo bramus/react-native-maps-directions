@@ -90,11 +90,15 @@ class MapViewDirections extends Component {
 			directionsServiceBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json',
 			region,
 			precision = 'low',
+			timePrecision = 'none',
+			channel,
 		} = props;
 
 		if (!initialOrigin || !initialDestination) {
 			return;
 		}
+
+		const timePrecisionString = timePrecision==='none' ? '' : timePrecision;
 		
 		// Routes array which we'll be filling.
 		// We'll perform a Directions API Request for reach route
@@ -165,7 +169,7 @@ class MapViewDirections extends Component {
 			}
 
 			return (
-				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision)
+				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecisionString, channel)
 					.then(result => {
 						return result;
 					})
@@ -208,12 +212,18 @@ class MapViewDirections extends Component {
 		});
 	}
 
-	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision) {
+	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecision, channel) {
 
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
 		if (typeof (directionsServiceBaseUrl) === 'string') {
-			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode.toLowerCase()}&language=${language}&region=${region}&departure_time=now`;
+			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode.toLowerCase()}&language=${language}&region=${region}`;
+			if(timePrecision){
+				url+=`&departure_time=${timePrecision}`;
+			}
+			if(channel){
+				url+=`&channel=${channel}`;
+			}
 		}
 
 		return fetch(url)
@@ -323,6 +333,8 @@ MapViewDirections.propTypes = {
 	directionsServiceBaseUrl: PropTypes.string,
 	region: PropTypes.string,
 	precision: PropTypes.oneOf(['high', 'low']),
+	timePrecision: PropTypes.oneOf(['now', 'none']),
+	channel: PropTypes.string,
 };
 
 export default MapViewDirections;
