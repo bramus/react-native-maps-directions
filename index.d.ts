@@ -39,6 +39,10 @@ declare module "react-native-maps-directions" {
     | "high"
     | "low";
 
+  export type MapViewDirectionsTimePrecision =
+      | "now"
+      | "none";
+
   export interface MapViewDirectionsProps {
     /**
      * The origin location to start routing from.
@@ -79,6 +83,20 @@ declare module "react-native-maps-directions" {
      * Defaults to "low"
      */
     precision?: MapViewDirectionsPrecision;
+    /**
+     * The timePrecision to get Realtime traffic info.
+     * Allowed values are "none", and "now".
+     * Defaults to "none"
+     */
+    timePrecision?: MapViewDirectionsPrecision;
+    /**
+     * If you include the channel parameter in your requests,
+     * you can generate a Successful Requests report that shows a breakdown
+     * of your application's API requests across different applications that
+     * use the same client ID (such as externally facing access vs. internally
+     * facing access).
+     */
+    channel?: string;
     /**
      * The language to use when calculating directions.
      */
