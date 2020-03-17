@@ -78,7 +78,7 @@ class MapViewDirections extends Component {
 		let {
 			origin: initialOrigin,
 			destination: initialDestination,
-			waypoints: initialWaypoints,
+			waypoints: initialWaypoints = [],
 			apikey,
 			onStart,
 			onReady,
