@@ -94,6 +94,11 @@ class MapViewDirections extends Component {
 			channel,
 		} = props;
 
+		if (!apikey) {
+			console.warn(`MapViewDirections Error: Missing API Key`); // eslint-disable-line no-console
+			return;
+		}
+
 		if (!initialOrigin || !initialDestination) {
 			return;
 		}
