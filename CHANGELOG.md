@@ -2,7 +2,11 @@
 
 ## vNext – ????-??-??
 
-- Improve error handling in case a request to the Google Maps Directions API fails
+- …
+
+## 1.7.6 - 2020-03-17
+
+- Improve error handling in case a request to the Google Maps Directions API fails (#132)
 - Improve error handling when no `apikey` prop is given
 
 ## 1.7.5 - 2020-03-17
