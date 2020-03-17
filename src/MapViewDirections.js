@@ -179,9 +179,7 @@ class MapViewDirections extends Component {
 						return result;
 					})
 					.catch(errorMessage => {
-						this.resetState();
-						console.warn(`MapViewDirections Error: ${errorMessage}`); // eslint-disable-line no-console
-						onError && onError(errorMessage);
+						return Promise.reject(errorMessage);
 					})
 			);
 		})).then(results => {
@@ -214,7 +212,12 @@ class MapViewDirections extends Component {
 					onReady(result);
 				}
 			});
-		});
+		})
+			.catch(errorMessage => {
+				this.resetState();
+				console.warn(`MapViewDirections Error: ${errorMessage}`); // eslint-disable-line no-console
+				onError && onError(errorMessage);
+			});
 	}
 
 	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecision, channel) {
@@ -269,7 +272,7 @@ class MapViewDirections extends Component {
 				}
 			})
 			.catch(err => {
-				console.warn('react-native-maps-directions Error on GMAPS route request', err);  // eslint-disable-line no-console
+				return Promise.reject(`Error on GMAPS route request: ${err}`);
 			});
 	}
 
