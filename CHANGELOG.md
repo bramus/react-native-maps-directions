@@ -1,5 +1,10 @@
 # `react-native-maps-directions` Changelog
 
+## vNext – ????-??-??
+
+- Improve error handling in case a request to the Google Maps Directions API fails
+- Improve error handling when no `apikey` prop is given
+
 ## 1.7.5 - 2020-03-17
 
 - Fix “Cannot set property 'map' of undefined” error (#130 #131 #132)
