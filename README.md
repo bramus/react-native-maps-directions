@@ -61,7 +61,7 @@ Once the directions in between `destination` and `origin` has been fetched, a `M
 | `origin` | `LatLng` or `String` | | The origin location to start routing from.
 | `destination` | `LatLng` or `String` | | The destination location to start routing to.
 | `apikey` | `String` | | Your Google Maps API Key _(request one [here](https://developers.google.com/maps/documentation/directions/get-api-key); if you're using an existing Google Maps API Key make sure you've enabled the Google Maps Directions API for that key using the [Google API Console](https://console.developers.google.com/apis/) by hitting the “Enable APIs and Services“ button)_.
-| `waypoints` | [`LatLng` or `String`] |  | Array of waypoints to use between origin and destination.
+| `waypoints` | [`LatLng` or `String`] | `[]` | Array of waypoints to use between origin and destination.
 | `language` | `String` | `"en"` | The language to use when calculating directions. See [here](https://developers.google.com/maps/documentation/javascript/localization) for more info.
 | `mode` | `String` | `"DRIVING"` | Which transportation mode to use when calculating directions. Allowed values are `"DRIVING"`, `"BICYCLING"`, `"WALKING"`, and `"TRANSIT"`. _(See [here](https://developers.google.com/maps/documentation/javascript/examples/directions-travel-modes) for more info)_.
 | `resetOnChange` | `boolean` | `true` | Tweak if the rendered `MapView.Polyline` should reset or not when calculating the route between `origin` and `destionation`. Set to `false` if you see the directions line glitching.
@@ -71,7 +71,7 @@ Once the directions in between `destination` and `origin` has been fetched, a `M
 | `region` | `String` | | If you are using strings for **origin** or **destination**, sometimes you will get an incorrect route because Google Maps API needs the region where this places belong to. See [here](https://developers.google.com/maps/documentation/javascript/localization#Region) for more info.
 | `precision` | `String` | `"low"` | The precision level of detail of the drawn polyline. Allowed values are "high", and "low". Setting to "low" will yield a polyline that is an approximate (smoothed) path of the resulting directions. Setting to "high" may cause a hit in performance in case a complex route is returned.
 | `timePrecision` | `String` | `"none"` | The timePrecision to get Realtime traffic info. Allowed values are "none", and "now". Defaults to "none".
-| `channel` | `String` | | If you include the channel parameter in your requests, you can generate a Successful Requests report that shows a breakdown of your application's API requests across different applications that use the same client ID (such as externally facing access vs. internally facing access).
+| `channel` | `String` | `null` | If you include the channel parameter in your requests, you can generate a Successful Requests report that shows a breakdown of your application's API requests across different applications that use the same client ID (such as externally facing access vs. internally facing access).
 #### More props
 
 Since the result rendered on screen is a `MapView.Polyline` component, all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted.
