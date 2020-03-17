@@ -9,7 +9,7 @@
 
 - Fix “Cannot set property 'map' of undefined” error (#130 #131 #132)
 
-## 1.7.4 - 2020-03-17
+## 1.7.4 - 2020-03-14
 
 - Add `channel` and `timePrecision` props to reduce the cost of Google maps (#129, thanks @rohitbansa)
 
