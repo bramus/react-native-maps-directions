@@ -1,6 +1,6 @@
 {
   "name": "react-native-maps-directions",
-  "version": "1.7.5",
+  "version": "1.7.6",
   "description": "Directions Component for react-native-maps",
   "main": "index.js",
   "scripts": {
