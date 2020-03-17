@@ -1,5 +1,13 @@
 # `react-native-maps-directions` Changelog
 
+## 1.7.5 - 2020-03-17
+
+- Fix “Cannot set property 'map' of undefined” error (#130 #131 #132)
+
+## 1.7.4 - 2020-03-17
+
+- Add `channel` and `timePrecision` props to reduce the cost of Google maps (#129, thanks @rohitbansa)
+
 ## 1.7.3 - 2019-10-02
 
 - Add `precision` prop to allow one to choose between the ”Steps Polyline” and “Overview Polyline”
