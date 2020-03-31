@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import MapView from 'react-native-maps';
 import isEqual from 'lodash.isequal';
 
-const WAYPOINT_LIMIT = 10;
+const WAYPOINT_LIMIT = 25;
 
 class MapViewDirections extends Component {
 
@@ -116,7 +116,7 @@ class MapViewDirections extends Component {
 			for (let i = 0; i < chunckedWaypoints.length; i++) {
 				routes.push({
 					waypoints: chunckedWaypoints[i],
-					origin: (i === 0) ? initialOrigin : chunckedWaypoints[i-1][chunckedWaypoints[i-1].length - 1],
+					origin: (i === 0) ? initialOrigin : chunckedWaypoints[i][0],
 					destination: (i === chunckedWaypoints.length - 1) ? initialDestination : chunckedWaypoints[i+1][0],
 				});
 			}
@@ -177,6 +177,7 @@ class MapViewDirections extends Component {
 			);
 		})).then(results => {
 			// Combine all Directions API Request results into one
+			var x = 0;
 			const result = results.reduce((acc, { distance, duration, coordinates, fare, waypointOrder }) => {
 				acc.coordinates = [
 					...acc.coordinates,
@@ -188,15 +189,21 @@ class MapViewDirections extends Component {
 					...acc.fares,
 					fare,
 				];
-				acc.waypointOrder = waypointOrder;
 
+				//array comes in starting at 0. Need offset so waypoint arrays don't overlap numbers
+				waypointOrder = waypointOrder.map(a => a+(x*WAYPOINT_LIMIT))
+				acc.waypointOrder = [
+					...acc.waypointOrder,
+					...waypointOrder,
+				];
+				x++;
 				return acc;
 			}, {
 				coordinates: [],
 				distance: 0,
 				duration: 0,
 				fares: [],
-				waypointOrder: [] 
+				waypointOrder: []
 			});
 
 			// Plot it out and call the onReady callback
