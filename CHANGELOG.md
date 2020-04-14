@@ -4,6 +4,10 @@
 
 - …
 
+## 1.8.0 - 2020-04-14
+
+- Add `waypointOrder` in `onReady` callback (#139)
+
 ## 1.7.6 - 2020-03-17
 
 - Improve error handling in case a request to the Google Maps Directions API fails (#132)
