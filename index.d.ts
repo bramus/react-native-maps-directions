@@ -8,26 +8,90 @@ declare module "react-native-maps-directions" {
 
   import * as React from "react";
 
+  export type MapDirectionsLegs =[
+    {
+      distance: {
+        text: string,
+        value: number
+      },
+      duration: {
+        text: string,
+        value: number
+      },
+      end_address: string,
+      end_location: {
+        lat: number,
+        lng: number
+      },
+      start_address: string,
+      start_location: {
+        lat: number,
+        lng: number
+      },
+      steps: [{
+        distance: {
+          text: string,
+          value: number
+        },
+        duration: {
+          text: string,
+          value: number
+        },
+        end_location: {
+          lat: number,
+          lng: number
+        },
+        start_location: {
+          lat: number,
+          lng: number
+        },
+        html_instructions: string,
+        polyline: {
+          points: string
+        },
+        travel_mode: string,
+        maneuver: string | undefined
+      }],
+      traffic_speed_entry: [],
+      via_waypoint: [],
+    }]
+
+  export type MapDirectionsResponse = {
+    coordinates: [
+      {
+        latitude: number,
+        longitude: number
+      }],
+    distance: number,
+    duration: number,
+    fares: [],
+    legs: MapDirectionsLegs,
+    waypointOrder: [[number]]
+  }
+
+
+
+
   export type MapViewDirectionsOrigin =
     | string
     | {
-        latitude: number;
-        longitude: number;
-      };
+      latitude: number;
+      longitude: number;
+    };
 
   export type MapViewDirectionsWaypoints =
     | string
     | {
-        latitude: number;
-        longitude: number;
-      };
+      latitude: number;
+      longitude: number;
+    };
 
   export type MapViewDirectionsDestination =
     | string
     | {
-        latitude: number;
-        longitude: number;
-      };
+      latitude: number;
+      longitude: number;
+    };
 
   export type MapViewDirectionsMode =
     | "DRIVING"
@@ -40,8 +104,8 @@ declare module "react-native-maps-directions" {
     | "low";
 
   export type MapViewDirectionsTimePrecision =
-      | "now"
-      | "none";
+    | "now"
+    | "none";
 
   export interface MapViewDirectionsProps {
     /**
@@ -67,7 +131,7 @@ declare module "react-native-maps-directions" {
     /**
      * Callback that is called when the routing has succesfully finished.
      */
-    onReady?: (...args: any[]) => any;
+    onReady?: (...args: MapDirectionsResponse[]) => any;
     /**
      * Callback that is called in case the routing has failed.
      */
@@ -88,7 +152,7 @@ declare module "react-native-maps-directions" {
      * Allowed values are "none", and "now".
      * Defaults to "none"
      */
-    timePrecision?: MapViewDirectionsPrecision;
+    timePrecision?: MapViewDirectionsTimePrecision;
     /**
      * If you include the channel parameter in your requests,
      * you can generate a Successful Requests report that shows a breakdown
@@ -217,7 +281,7 @@ declare module "react-native-maps-directions" {
   export default class MapViewDirections extends React.Component<
     MapViewDirectionsProps,
     any
-  > {
+    > {
     render(): JSX.Element;
   }
 }
