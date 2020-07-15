@@ -281,7 +281,7 @@ declare module "react-native-maps-directions" {
   export default class MapViewDirections extends React.Component<
     MapViewDirectionsProps,
     any
-      > {
+  > {
     render(): JSX.Element;
   }
 }
