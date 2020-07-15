@@ -104,7 +104,7 @@ class MapViewDirections extends Component {
 		}
 
 		const timePrecisionString = timePrecision === 'none' ? '' : timePrecision;
-
+		
 		// Routes array which we'll be filling.
 		// We'll perform a Directions API Request for reach route
 		const routes = [];
@@ -114,8 +114,8 @@ class MapViewDirections extends Component {
 		if (splitWaypoints && initialWaypoints && initialWaypoints.length > WAYPOINT_LIMIT) {
 			// Split up waypoints in chunks with chunksize WAYPOINT_LIMIT
 			const chunckedWaypoints = initialWaypoints.reduce((accumulator, waypoint, index) => {
-				const numChunk = Math.floor(index / WAYPOINT_LIMIT);
-				accumulator[numChunk] = [].concat((accumulator[numChunk] || []), waypoint);
+				const numChunk = Math.floor(index / WAYPOINT_LIMIT); 
+				accumulator[numChunk] = [].concat((accumulator[numChunk] || []), waypoint); 
 				return accumulator;
 			}, []);
 
@@ -125,8 +125,8 @@ class MapViewDirections extends Component {
 			for (let i = 0; i < chunckedWaypoints.length; i++) {
 				routes.push({
 					waypoints: chunckedWaypoints[i],
-					origin: (i === 0) ? initialOrigin : chunckedWaypoints[i - 1][chunckedWaypoints[i - 1].length - 1],
-					destination: (i === chunckedWaypoints.length - 1) ? initialDestination : chunckedWaypoints[i + 1][0],
+					origin: (i === 0) ? initialOrigin : chunckedWaypoints[i-1][chunckedWaypoints[i-1].length - 1],
+					destination: (i === chunckedWaypoints.length - 1) ? initialDestination : chunckedWaypoints[i+1][0],
 				});
 			}
 		}
@@ -214,7 +214,7 @@ class MapViewDirections extends Component {
 			// Plot it out and call the onReady callback
 			this.setState({
 				coordinates: result.coordinates,
-			}, function () {
+			}, function() {
 				if (onReady) {
 					onReady(result);
 				}
@@ -233,11 +233,11 @@ class MapViewDirections extends Component {
 		let url = directionsServiceBaseUrl;
 		if (typeof (directionsServiceBaseUrl) === 'string') {
 			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode.toLowerCase()}&language=${language}&region=${region}`;
-			if (timePrecision) {
-				url += `&departure_time=${timePrecision}`;
+			if(timePrecision){
+				url+=`&departure_time=${timePrecision}`;
 			}
-			if (channel) {
-				url += `&channel=${channel}`;
+			if(channel){
+				url+=`&channel=${channel}`;
 			}
 		}
 
@@ -263,7 +263,7 @@ class MapViewDirections extends Component {
 						}, 0) / 60,
 						coordinates: (
 							(precision === 'low') ?
-								this.decode([{ polyline: route.overview_polyline }]) :
+								this.decode([{ polyline: route.overview_polyline}]) :
 								route.legs.reduce((carry, curr) => {
 									return [
 										...carry,
