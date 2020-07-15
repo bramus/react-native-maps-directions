@@ -103,7 +103,7 @@ class MapViewDirections extends Component {
 			return;
 		}
 
-		const timePrecisionString = timePrecision === 'none' ? '' : timePrecision;
+		const timePrecisionString = timePrecision==='none' ? '' : timePrecision;
 		
 		// Routes array which we'll be filling.
 		// We'll perform a Directions API Request for reach route
@@ -130,7 +130,7 @@ class MapViewDirections extends Component {
 				});
 			}
 		}
-
+		
 		// No splitting of the waypoints is requested/needed.
 		// ~> Use one single route
 		else {
