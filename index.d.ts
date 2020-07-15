@@ -75,23 +75,23 @@ declare module "react-native-maps-directions" {
   export type MapViewDirectionsOrigin =
     | string
     | {
-      latitude: number;
-      longitude: number;
-    };
+        latitude: number;
+        longitude: number;
+      };
 
   export type MapViewDirectionsWaypoints =
     | string
     | {
-      latitude: number;
-      longitude: number;
-    };
+        latitude: number;
+        longitude: number;
+      };
 
   export type MapViewDirectionsDestination =
     | string
     | {
-      latitude: number;
-      longitude: number;
-    };
+        latitude: number;
+        longitude: number;
+      };
 
   export type MapViewDirectionsMode =
     | "DRIVING"
@@ -104,8 +104,8 @@ declare module "react-native-maps-directions" {
     | "low";
 
   export type MapViewDirectionsTimePrecision =
-    | "now"
-    | "none";
+      | "now"
+      | "none";
 
   export interface MapViewDirectionsProps {
     /**
@@ -281,7 +281,7 @@ declare module "react-native-maps-directions" {
   export default class MapViewDirections extends React.Component<
     MapViewDirectionsProps,
     any
-    > {
+      > {
     render(): JSX.Element;
   }
 }
