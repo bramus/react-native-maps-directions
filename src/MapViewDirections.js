@@ -263,7 +263,7 @@ class MapViewDirections extends Component {
 						}, 0) / 60,
 						coordinates: (
 							(precision === 'low') ?
-								this.decode([{ polyline: route.overview_polyline}]) :
+								this.decode([{polyline: route.overview_polyline}]) :
 								route.legs.reduce((carry, curr) => {
 									return [
 										...carry,
