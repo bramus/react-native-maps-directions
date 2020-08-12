@@ -195,7 +195,7 @@ class MapViewDirections extends Component {
 					...acc.fares,
 					fare,
 				];
-				acc.legs = legs
+				acc.legs = legs;
 				acc.waypointOrder = [
 					...acc.waypointOrder,
 					waypointOrder,
@@ -273,7 +273,7 @@ class MapViewDirections extends Component {
 						),
 						fare: route.fare,
 						waypointOrder: route.waypoint_order,
-						legs: route.legs
+						legs: route.legs,
 					});
 
 				} else {
