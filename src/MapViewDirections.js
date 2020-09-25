@@ -277,7 +277,6 @@ class MapViewDirections extends Component {
 									];
 								}, [])
 						),
-						steps: route.legs,
 						fare: route.fare,
 						waypointOrder: route.waypoint_order,
 					});
