@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MapView from 'react-native-maps';
 import isEqual from 'lodash.isequal';
+import reactotron from 'reactotron-react-native';
 
 const WAYPOINT_LIMIT = 10;
 
@@ -184,7 +185,7 @@ class MapViewDirections extends Component {
 			);
 		})).then(results => {
 			// Combine all Directions API Request results into one
-			const result = results.reduce((acc, { distance, duration, coordinates, fare, waypointOrder }) => {
+			const result = results.reduce((acc, { distance, duration, coordinates, fare, waypointOrder, steps }) => {
 				acc.coordinates = [
 					...acc.coordinates,
 					...coordinates,
@@ -199,6 +200,14 @@ class MapViewDirections extends Component {
 					...acc.waypointOrder,
 					waypointOrder,
 				];
+				acc.splitedSteps = steps.reduce((accumulator, step) => [
+					...accumulator,
+					{
+						distance: step.distance.value,
+						duration: step.duration.value
+					}
+				], [])
+
 
 				return acc;
 			}, {
@@ -207,6 +216,7 @@ class MapViewDirections extends Component {
 				duration: 0,
 				fares: [],
 				waypointOrder: [],
+				splitedSteps: [],
 			});
 
 			// Plot it out and call the onReady callback
@@ -269,6 +279,7 @@ class MapViewDirections extends Component {
 									];
 								}, [])
 						),
+						steps: route.legs,
 						fare: route.fare,
 						waypointOrder: route.waypoint_order,
 					});
