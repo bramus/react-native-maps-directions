@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MapView from 'react-native-maps';
 import isEqual from 'lodash.isequal';
-import reactotron from 'reactotron-react-native';
 
 const WAYPOINT_LIMIT = 10;
 
@@ -204,10 +203,9 @@ class MapViewDirections extends Component {
 					...accumulator,
 					{
 						distance: step.distance.value,
-						duration: step.duration.value
-					}
-				], [])
-
+						duration: step.duration.value,
+					},
+				], []);
 
 				return acc;
 			}, {
