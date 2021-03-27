@@ -88,7 +88,7 @@ declare module "react-native-maps-directions" {
      * Allowed values are "none", and "now".
      * Defaults to "none"
      */
-    timePrecision?: MapViewDirectionsPrecision;
+    timePrecision?: MapViewDirectionsTimePrecision;
     /**
      * If you include the channel parameter in your requests,
      * you can generate a Successful Requests report that shows a breakdown
