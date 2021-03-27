@@ -189,7 +189,7 @@ class Example extends Component {
         {(this.state.coordinates.length >= 2) && (
           <MapViewDirections
             origin={this.state.coordinates[0]}
-            waypoints={ (this.state.coordinates.length > 2) ? this.state.coordinates.slice(1, -1): null}
+            waypoints={ (this.state.coordinates.length > 2) ? this.state.coordinates.slice(1, -1): undefined}
             destination={this.state.coordinates[this.state.coordinates.length-1]}
             apikey={GOOGLE_MAPS_APIKEY}
             strokeWidth={3}
