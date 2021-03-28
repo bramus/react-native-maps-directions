@@ -8,6 +8,70 @@ declare module "react-native-maps-directions" {
 
   import * as React from "react";
 
+  export type MapDirectionsLegs =[
+    {
+      distance: {
+        text: string,
+        value: number
+      },
+      duration: {
+        text: string,
+        value: number
+      },
+      end_address: string,
+      end_location: {
+        lat: number,
+        lng: number
+      },
+      start_address: string,
+      start_location: {
+        lat: number,
+        lng: number
+      },
+      steps: [{
+        distance: {
+          text: string,
+          value: number
+        },
+        duration: {
+          text: string,
+          value: number
+        },
+        end_location: {
+          lat: number,
+          lng: number
+        },
+        start_location: {
+          lat: number,
+          lng: number
+        },
+        html_instructions: string,
+        polyline: {
+          points: string
+        },
+        travel_mode: string,
+        maneuver: string | undefined
+      }],
+      traffic_speed_entry: [],
+      via_waypoint: [],
+    }]
+
+  export type MapDirectionsResponse = {
+    coordinates: [
+      {
+        latitude: number,
+        longitude: number
+      }],
+    distance: number,
+    duration: number,
+    fares: [],
+    legs: MapDirectionsLegs,
+    waypointOrder: [[number]]
+  }
+
+
+
+
   export type MapViewDirectionsOrigin =
     | string
     | {
@@ -67,7 +131,7 @@ declare module "react-native-maps-directions" {
     /**
      * Callback that is called when the routing has succesfully finished.
      */
-    onReady?: (...args: any[]) => any;
+    onReady?: (...args: MapDirectionsResponse[]) => any;
     /**
      * Callback that is called in case the routing has failed.
      */
