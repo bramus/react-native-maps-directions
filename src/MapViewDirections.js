@@ -8,14 +8,14 @@ const WAYPOINT_LIMIT = 10;
 const promiseMemoize = (fn, resolver) => {
 	let cache = {};
 	return (...args) => {
+		let strX = JSON.stringify(args);
 		const trySetResultsToCache = () => {
 			return (cache[strX] = fn(...args).catch((x) => {
 				delete cache[strX];
 				return Promise.reject(x);
 			}));
 		};
-		
-		let strX = JSON.stringify(args);
+
 		if (strX in cache) {
 			return Promise.resolve(cache[strX]).then(cachedResult => {
 				if (resolver && !resolver({ cachedResult, providedArgs: args[0] })) {
