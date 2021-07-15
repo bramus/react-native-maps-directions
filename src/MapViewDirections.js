@@ -5,6 +5,29 @@ import isEqual from 'lodash.isequal';
 
 const WAYPOINT_LIMIT = 10;
 
+const promiseMemoize = (fn, resolver) => {
+	let cache = {};
+	return (...args) => {
+		let strX = JSON.stringify(args);
+		if (strX in cache) {
+			return Promise.resolve(cache[strX]).then(cachedResult=> {
+				if (resolver && !resolver({ cachedResult, providedArgs: args[0] })) {
+					return (cache[strX] = fn(...args).catch((x) => {
+						delete cache[strX];
+						return x;
+					}));
+				}
+				return cache[strX];
+			});
+		} else {
+			return (cache[strX] = fn(...args).catch((x) => {
+				delete cache[strX];
+				return x;
+			}));
+		}
+	};
+};
+
 class MapViewDirections extends Component {
 
 	constructor(props) {
@@ -103,8 +126,8 @@ class MapViewDirections extends Component {
 			return;
 		}
 
-		const timePrecisionString = timePrecision==='none' ? '' : timePrecision;
-		
+		const timePrecisionString = timePrecision === 'none' ? '' : timePrecision;
+
 		// Routes array which we'll be filling.
 		// We'll perform a Directions API Request for reach route
 		const routes = [];
@@ -114,8 +137,8 @@ class MapViewDirections extends Component {
 		if (splitWaypoints && initialWaypoints && initialWaypoints.length > WAYPOINT_LIMIT) {
 			// Split up waypoints in chunks with chunksize WAYPOINT_LIMIT
 			const chunckedWaypoints = initialWaypoints.reduce((accumulator, waypoint, index) => {
-				const numChunk = Math.floor(index / WAYPOINT_LIMIT); 
-				accumulator[numChunk] = [].concat((accumulator[numChunk] || []), waypoint); 
+				const numChunk = Math.floor(index / WAYPOINT_LIMIT);
+				accumulator[numChunk] = [].concat((accumulator[numChunk] || []), waypoint);
 				return accumulator;
 			}, []);
 
@@ -125,12 +148,12 @@ class MapViewDirections extends Component {
 			for (let i = 0; i < chunckedWaypoints.length; i++) {
 				routes.push({
 					waypoints: chunckedWaypoints[i],
-					origin: (i === 0) ? initialOrigin : chunckedWaypoints[i-1][chunckedWaypoints[i-1].length - 1],
-					destination: (i === chunckedWaypoints.length - 1) ? initialDestination : chunckedWaypoints[i+1][0],
+					origin: (i === 0) ? initialOrigin : chunckedWaypoints[i - 1][chunckedWaypoints[i - 1].length - 1],
+					destination: (i === chunckedWaypoints.length - 1) ? initialDestination : chunckedWaypoints[i + 1][0],
 				});
 			}
 		}
-		
+
 		// No splitting of the waypoints is requested/needed.
 		// ~> Use one single route
 		else {
@@ -174,7 +197,7 @@ class MapViewDirections extends Component {
 			}
 
 			return (
-				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecisionString, channel)
+				this.fetchRoute({ directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecision: timePrecisionString, channel })
 					.then(result => {
 						return result;
 					})
@@ -212,7 +235,7 @@ class MapViewDirections extends Component {
 			// Plot it out and call the onReady callback
 			this.setState({
 				coordinates: result.coordinates,
-			}, function() {
+			}, function () {
 				if (onReady) {
 					onReady(result);
 				}
@@ -225,17 +248,16 @@ class MapViewDirections extends Component {
 			});
 	}
 
-	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecision, channel) {
-
+	fetchRoute = promiseMemoize(({ directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecision, channel }) => {
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
 		if (typeof (directionsServiceBaseUrl) === 'string') {
 			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode.toLowerCase()}&language=${language}&region=${region}`;
-			if(timePrecision){
-				url+=`&departure_time=${timePrecision}`;
+			if (timePrecision) {
+				url += `&departure_time=${timePrecision}`;
 			}
-			if(channel){
-				url+=`&channel=${channel}`;
+			if (channel) {
+				url += `&channel=${channel}`;
 			}
 		}
 
@@ -261,7 +283,7 @@ class MapViewDirections extends Component {
 						}, 0) / 60,
 						coordinates: (
 							(precision === 'low') ?
-								this.decode([{polyline: route.overview_polyline}]) :
+								this.decode([{ polyline: route.overview_polyline }]) :
 								route.legs.reduce((carry, curr) => {
 									return [
 										...carry,
@@ -280,9 +302,27 @@ class MapViewDirections extends Component {
 			.catch(err => {
 				return Promise.reject(`Error on GMAPS route request: ${err}`);
 			});
-	}
+	}, ({ cachedResult, providedArgs }) => {
+		const { isMemoized } = this.props;
+
+		
+		if (typeof isMemoized === "boolean") {
+			return isMemoized;
+		}
+
+		if (!isMemoized || (typeof isMemoized !== 'function')) {
+			return false;
+		}
+
+		try {
+			return isMemoized({ cachedResult, ...providedArgs });
+		} catch {
+			return false;
+		}
+	})
 
 	render() {
+
 		const { coordinates } = this.state;
 
 		if (!coordinates) {
@@ -349,6 +389,7 @@ MapViewDirections.propTypes = {
 	precision: PropTypes.oneOf(['high', 'low']),
 	timePrecision: PropTypes.oneOf(['now', 'none']),
 	channel: PropTypes.string,
+	isMemoized: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
 };
 
 export default MapViewDirections;
