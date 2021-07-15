@@ -72,6 +72,7 @@ Once the directions in between `destination` and `origin` has been fetched, a `M
 | `precision` | `String` | `"low"` | The precision level of detail of the drawn polyline. Allowed values are "high", and "low". Setting to "low" will yield a polyline that is an approximate (smoothed) path of the resulting directions. Setting to "high" may cause a hit in performance in case a complex route is returned.
 | `timePrecision` | `String` | `"none"` | The timePrecision to get Realtime traffic info. Allowed values are "none", and "now". Defaults to "none".
 | `channel` | `String` | `null` | If you include the channel parameter in your requests, you can generate a Successful Requests report that shows a breakdown of your application's API requests across different applications that use the same client ID (such as externally facing access vs. internally facing access).
+| `isMemoized` | `boolean` or `Function` | `null` | If you want to memoize requests to google API in order to reduce cost, you can either pass true which will memoize your requests automatically by the function signature, alternativly you can use a callback to decide when to memoize your requests based on origin, destination and cachedResult.
 #### More props
 
 Since the result rendered on screen is a `MapView.Polyline` component, all [`MapView.Polyline` props](https://github.com/airbnb/react-native-maps/blob/master/docs/polyline.md#props) – except for `coordinates` – are also accepted.
@@ -214,6 +215,11 @@ class Example extends Component {
             onError={(errorMessage) => {
               // console.log('GOT AN ERROR');
             }}
+            // By default all requests are not memoized, you can pass either a boolean here or a resolver function to decide when to memoize the request
+            isMemoized={({ origin, destination, cachedResults, /* Rest of the props supplied to the component when request was made */ }) => { 
+              // Logic to decide when to memoize goes here
+              return false
+            }}
           />
         )}
       </MapView>
@@ -223,6 +229,7 @@ class Example extends Component {
 
 export default Example;
 ```
+
 
 ## Example App
 
