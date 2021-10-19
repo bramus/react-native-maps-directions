@@ -216,7 +216,8 @@ class MapViewDirections extends Component {
           region,
           precision,
           timePrecisionString,
-          channel
+          channel,
+          avoidTolls
         )
           .then((result) => {
             return result;
@@ -409,6 +410,7 @@ MapViewDirections.propTypes = {
   precision: PropTypes.oneOf(["high", "low"]),
   timePrecision: PropTypes.oneOf(["now", "none"]),
   channel: PropTypes.string,
+  avoidTolls: PropTypes.bool,
 };
 
 export default MapViewDirections;
