@@ -22,7 +22,7 @@ class MapViewDirections extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (!isEqual(prevProps.origin, this.props.origin) || !isEqual(prevProps.destination, this.props.destination) || !isEqual(prevProps.waypoints, this.props.waypoints) || !isEqual(prevProps.mode, this.props.mode) || !isEqual(prevProps.precision, this.props.precision) || !isEqual(prevProps.splitWaypoints, this.props.splitWaypoints)) {
+		if (!isEqual(prevProps.origin, this.props.origin) || !isEqual(prevProps.destination, this.props.destination) || !isEqual(prevProps.waypoints, this.props.waypoints) || !isEqual(prevProps.mode, this.props.mode) || !isEqual(prevProps.precision, this.props.precision) || !isEqual(prevProps.splitWaypoints, this.props.splitWaypoint || !isEqual(prevProps.avoidTolls, this.props.avoidTolls))) {
 			if (this.props.resetOnChange === false) {
 				this.fetchAndRenderRoute(this.props);
 			} else {
@@ -92,6 +92,7 @@ class MapViewDirections extends Component {
 			precision = 'low',
 			timePrecision = 'none',
 			channel,
+			avoidTolls
 		} = props;
 
 		if (!apikey) {
@@ -174,7 +175,7 @@ class MapViewDirections extends Component {
 			}
 
 			return (
-				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecisionString, channel)
+				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecisionString, channel, avoidTolls)
 					.then(result => {
 						return result;
 					})
@@ -227,7 +228,7 @@ class MapViewDirections extends Component {
 			});
 	}
 
-	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecision, channel) {
+	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecision, channel, avoidTolls) {
 
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
@@ -238,6 +239,9 @@ class MapViewDirections extends Component {
 			}
 			if(channel){
 				url+=`&channel=${channel}`;
+			}
+			if(avoidTolls) {
+				url+='&avoid=tolls'
 			}
 		}
 
@@ -352,6 +356,7 @@ MapViewDirections.propTypes = {
 	precision: PropTypes.oneOf(['high', 'low']),
 	timePrecision: PropTypes.oneOf(['now', 'none']),
 	channel: PropTypes.string,
+	avoidTolls: PropTypes.bool
 };
 
 export default MapViewDirections;

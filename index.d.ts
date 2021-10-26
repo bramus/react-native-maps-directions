@@ -198,6 +198,12 @@ declare module "react-native-maps-directions" {
      * Google Maps API needs the region where this places belong to.
      */
     region?: string;
+    /** 
+     * If you want the user to specify the ability to avoid tolls
+     * pass the prop avoidTolls to MapViewDirections with a value of either true or false.
+     * This reconfigures the url to include "&avoid=tolls" to give the user a new route
+     */
+      avoitTolls?: boolean;
     /**
      * @number
      * The stroke width to use for the path - the line displayed
