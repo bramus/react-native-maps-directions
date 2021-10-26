@@ -22,7 +22,7 @@ class MapViewDirections extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		if (!isEqual(prevProps.origin, this.props.origin) || !isEqual(prevProps.destination, this.props.destination) || !isEqual(prevProps.waypoints, this.props.waypoints) || !isEqual(prevProps.mode, this.props.mode) || !isEqual(prevProps.precision, this.props.precision) || !isEqual(prevProps.splitWaypoints, this.props.splitWaypoint || !isEqual(prevProps.avoidTolls, this.props.avoidTolls))) {
+		if (!isEqual(prevProps.origin, this.props.origin) || !isEqual(prevProps.destination, this.props.destination) || !isEqual(prevProps.waypoints, this.props.waypoints) || !isEqual(prevProps.mode, this.props.mode) || !isEqual(prevProps.precision, this.props.precision) || !isEqual(prevProps.splitWaypoints, this.props.splitWaypoints || !isEqual(prevProps.avoidTolls, this.props.avoidTolls))) {
 			if (this.props.resetOnChange === false) {
 				this.fetchAndRenderRoute(this.props);
 			} else {
