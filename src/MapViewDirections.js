@@ -87,15 +87,15 @@ class MapViewDirections extends Component {
 			language = 'en',
 			optimizeWaypoints,
 			splitWaypoints,
-			directionsServiceBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json',
-			region,
+			directionsServiceBaseUrl='http://127.0.0.1:5000/route/v1/driving',
 			precision = 'low',
 			timePrecision = 'none',
 			channel,
+			steps=true
 		} = props;
 
-		if (!apikey) {
-			console.warn(`MapViewDirections Error: Missing API Key`); // eslint-disable-line no-console
+		if (!directionsServiceBaseUrl) {
+			console.warn(`MapViewDirections Error: Missing directionEnpoint`); // eslint-disable-line no-console
 			return;
 		}
 
@@ -174,7 +174,7 @@ class MapViewDirections extends Component {
 			}
 
 			return (
-				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecisionString, channel)
+				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, mode, language, steps, precision, timePrecisionString, channel)
 					.then(result => {
 						return result;
 					})
@@ -227,12 +227,12 @@ class MapViewDirections extends Component {
 			});
 	}
 
-	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecision, channel) {
+	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, mode, language, steps, precision, timePrecision, channel) {
 
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
 		if (typeof (directionsServiceBaseUrl) === 'string') {
-			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode.toLowerCase()}&language=${language}&region=${region}`;
+			url += `/${origin};${destination}?steps=${steps}`;
 			if(timePrecision){
 				url+=`&departure_time=${timePrecision}`;
 			}
@@ -338,7 +338,6 @@ MapViewDirections.propTypes = {
 			longitude: PropTypes.number.isRequired,
 		}),
 	]),
-	apikey: PropTypes.string.isRequired,
 	onStart: PropTypes.func,
 	onReady: PropTypes.func,
 	onError: PropTypes.func,
@@ -348,7 +347,7 @@ MapViewDirections.propTypes = {
 	optimizeWaypoints: PropTypes.bool,
 	splitWaypoints: PropTypes.bool,
 	directionsServiceBaseUrl: PropTypes.string,
-	region: PropTypes.string,
+	steps: PropTypes.bool,
 	precision: PropTypes.oneOf(['high', 'low']),
 	timePrecision: PropTypes.oneOf(['now', 'none']),
 	channel: PropTypes.string,
