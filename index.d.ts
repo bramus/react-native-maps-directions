@@ -8,70 +8,6 @@ declare module "react-native-maps-directions" {
 
   import * as React from "react";
 
-  export type MapDirectionsLegs =[
-    {
-      distance: {
-        text: string,
-        value: number
-      },
-      duration: {
-        text: string,
-        value: number
-      },
-      end_address: string,
-      end_location: {
-        lat: number,
-        lng: number
-      },
-      start_address: string,
-      start_location: {
-        lat: number,
-        lng: number
-      },
-      steps: [{
-        distance: {
-          text: string,
-          value: number
-        },
-        duration: {
-          text: string,
-          value: number
-        },
-        end_location: {
-          lat: number,
-          lng: number
-        },
-        start_location: {
-          lat: number,
-          lng: number
-        },
-        html_instructions: string,
-        polyline: {
-          points: string
-        },
-        travel_mode: string,
-        maneuver: string | undefined
-      }],
-      traffic_speed_entry: [],
-      via_waypoint: [],
-    }]
-
-  export type MapDirectionsResponse = {
-    coordinates: [
-      {
-        latitude: number,
-        longitude: number
-      }],
-    distance: number,
-    duration: number,
-    fares: [],
-    legs: MapDirectionsLegs,
-    waypointOrder: [[number]]
-  }
-
-
-
-
   export type MapViewDirectionsOrigin =
     | string
     | {
@@ -99,13 +35,9 @@ declare module "react-native-maps-directions" {
     | "TRANSIT"
     | "WALKING";
 
-  export type MapViewDirectionsPrecision =
-    | "high"
-    | "low";
+  export type MapViewDirectionsPrecision = "high" | "low";
 
-  export type MapViewDirectionsTimePrecision =
-      | "now"
-      | "none";
+  export type MapViewDirectionsTimePrecision = "now" | "none";
 
   export interface MapViewDirectionsProps {
     /**
@@ -123,7 +55,11 @@ declare module "react-native-maps-directions" {
     /**
      * Your Google Maps API Key
      */
-    apikey: string;
+    apikey?: string;
+    /**
+     * Data that is used to plot the map
+     */
+    geoData?: object;
     /**
      * Callback that is called when the routing has started.
      */
@@ -131,7 +67,7 @@ declare module "react-native-maps-directions" {
     /**
      * Callback that is called when the routing has succesfully finished.
      */
-    onReady?: (...args: MapDirectionsResponse[]) => any;
+    onReady?: (...args: any[]) => any;
     /**
      * Callback that is called in case the routing has failed.
      */
@@ -152,7 +88,7 @@ declare module "react-native-maps-directions" {
      * Allowed values are "none", and "now".
      * Defaults to "none"
      */
-    timePrecision?: MapViewDirectionsTimePrecision;
+    timePrecision?: MapViewDirectionsPrecision;
     /**
      * If you include the channel parameter in your requests,
      * you can generate a Successful Requests report that shows a breakdown
