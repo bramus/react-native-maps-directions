@@ -92,6 +92,7 @@ class MapViewDirections extends Component {
 			precision = 'low',
 			timePrecision = 'none',
 			channel,
+			preferredRoute,
 		} = props;
 
 		if (!apikey) {
@@ -174,7 +175,7 @@ class MapViewDirections extends Component {
 			}
 
 			return (
-				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecisionString, channel)
+				this.fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecisionString, channel, preferredRoute)
 					.then(result => {
 						return result;
 					})
@@ -184,7 +185,7 @@ class MapViewDirections extends Component {
 			);
 		})).then(results => {
 			// Combine all Directions API Request results into one
-			const result = results.reduce((acc, { distance, duration, coordinates, fare, legs, waypointOrder }) => {
+			const result = results.reduce((acc, { distance, duration, coordinates, fare, waypointOrder }) => {
 				acc.coordinates = [
 					...acc.coordinates,
 					...coordinates,
@@ -195,7 +196,6 @@ class MapViewDirections extends Component {
 					...acc.fares,
 					fare,
 				];
-				acc.legs = legs;
 				acc.waypointOrder = [
 					...acc.waypointOrder,
 					waypointOrder,
@@ -207,7 +207,6 @@ class MapViewDirections extends Component {
 				distance: 0,
 				duration: 0,
 				fares: [],
-				legs: [],
 				waypointOrder: [],
 			});
 
@@ -227,7 +226,7 @@ class MapViewDirections extends Component {
 			});
 	}
 
-	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecision, channel) {
+	fetchRoute(directionsServiceBaseUrl, origin, waypoints, destination, apikey, mode, language, region, precision, timePrecision, channel, preferredRoute) {
 
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
@@ -238,6 +237,9 @@ class MapViewDirections extends Component {
 			}
 			if(channel){
 				url+=`&channel=${channel}`;
+			}
+			if (preferredRoute) {
+				url += `&alternatives=${true}`
 			}
 		}
 
@@ -251,8 +253,8 @@ class MapViewDirections extends Component {
 				}
 
 				if (json.routes.length) {
-
-					const route = json.routes[0];
+					
+					const route = preferredRoute && preferredRoute < json.routes.length ? json.routes[preferredRoute] : json.routes[0];
 
 					return Promise.resolve({
 						distance: route.legs.reduce((carry, curr) => {
@@ -273,7 +275,6 @@ class MapViewDirections extends Component {
 						),
 						fare: route.fare,
 						waypointOrder: route.waypoint_order,
-						legs: route.legs,
 					});
 
 				} else {
