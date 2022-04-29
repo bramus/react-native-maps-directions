@@ -92,7 +92,7 @@ class MapViewDirections extends Component {
 			precision = 'low',
 			timePrecision = 'none',
 			channel,
-			preferredRoute,
+			preferredRoute
 		} = props;
 
 		if (!apikey) {
@@ -185,7 +185,7 @@ class MapViewDirections extends Component {
 			);
 		})).then(results => {
 			// Combine all Directions API Request results into one
-			const result = results.reduce((acc, { distance, duration, coordinates, fare, waypointOrder }) => {
+			const result = results.reduce((acc, { distance, duration, coordinates, fare, legs, waypointOrder }) => {
 				acc.coordinates = [
 					...acc.coordinates,
 					...coordinates,
@@ -196,6 +196,7 @@ class MapViewDirections extends Component {
 					...acc.fares,
 					fare,
 				];
+				acc.legs = legs;
 				acc.waypointOrder = [
 					...acc.waypointOrder,
 					waypointOrder,
@@ -207,6 +208,7 @@ class MapViewDirections extends Component {
 				distance: 0,
 				duration: 0,
 				fares: [],
+				legs: [],
 				waypointOrder: [],
 			});
 
@@ -253,7 +255,7 @@ class MapViewDirections extends Component {
 				}
 
 				if (json.routes.length) {
-					
+
 					const route = preferredRoute && preferredRoute < json.routes.length ? json.routes[preferredRoute] : json.routes[0];
 
 					return Promise.resolve({
@@ -275,6 +277,7 @@ class MapViewDirections extends Component {
 						),
 						fare: route.fare,
 						waypointOrder: route.waypoint_order,
+						legs: route.legs,
 					});
 
 				} else {
