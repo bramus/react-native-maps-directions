@@ -203,7 +203,7 @@ declare module "react-native-maps-directions" {
      * pass the prop avoidTolls to MapViewDirections with a value of either true or false.
      * This reconfigures the url to include "&avoid=tolls" to give the user a new route
      */
-      avoitTolls?: boolean;
+      avoidTolls?: boolean;
     /**
      * @number
      * The stroke width to use for the path - the line displayed
