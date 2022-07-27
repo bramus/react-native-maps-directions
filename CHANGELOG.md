@@ -1,10 +1,11 @@
 # `react-native-maps-directions` Changelog
 
-## 1.8.2 – 2020-08-12
+## 1.9.0 – 2022-07-27
 
-- Fix: `timePrecision` prop type to MapViewDirectionsTimePrecision;
+- Fix: `timePrecision` prop type to `MapViewDirectionsTimePrecision`
 - Add `legs` in `onReady` callback;
 - Add types in `onReady`return;
+- Compatibility with `react-native-maps` 1.0.0
 
 ## 1.8.0 - 2020-04-14
 
