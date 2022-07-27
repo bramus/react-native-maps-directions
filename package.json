@@ -30,7 +30,7 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-maps": ">=0.12.1"
+    "react-native-maps": ">=1.0.0"
   },
   "private": false,
   "dependencies": {
