@@ -154,6 +154,12 @@ declare module "react-native-maps-directions" {
      */
     timePrecision?: MapViewDirectionsTimePrecision;
     /**
+     * If you pass true, the requests will be cached by the origin, destination, region, and all the provided options to the component
+     * you can also pass a function that returns a boolean,
+     * that function receives callback with all the fields that was used in order to fetch the directions
+     */
+    isMemoized?: Function | boolean;
+    /**
      * If you include the channel parameter in your requests,
      * you can generate a Successful Requests report that shows a breakdown
      * of your application's API requests across different applications that
