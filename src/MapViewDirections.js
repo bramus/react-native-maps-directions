@@ -92,6 +92,9 @@ class MapViewDirections extends Component {
 			precision = 'low',
 			timePrecision = 'none',
 			channel,
+			strokeWidth = 1,
+			strokeBorderWidth = 0,
+			strokeBorderColor = '#FFF',
 		} = props;
 
 		if (!apikey) {
@@ -308,7 +311,10 @@ class MapViewDirections extends Component {
 		} = this.props;
 
 		return (
-			<Polyline coordinates={coordinates} {...props} />
+			<>
+				{strokeBorderWidth > 0 && <Polyline coordinates={coordinates} {...[...props, { strokeWidth: strokeBorderWidth + strokeWidth, strokeColor: strokeBorderColor}]} />}
+				<Polyline coordinates={coordinates} {...props} />
+			</>
 		);
 	}
 
