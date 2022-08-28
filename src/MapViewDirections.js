@@ -309,13 +309,13 @@ class MapViewDirections extends Component {
 
 		const borderPolylineProps = {
 			...props,
-			strokeWidth: this.strokeBorderWidth + this.strokeWidth,
-			strokeColor: this.strokeBorderColor,
+			strokeWidth: props.strokeBorderWidth + props.strokeWidth,
+			strokeColor: props.strokeBorderColor,
 		};
 
 		return (
 			<>
-				{this.strokeBorderWidth > 0 &&
+				{props.strokeBorderWidth &&
 					<Polyline coordinates={coordinates} {...borderPolylineProps} />
 				}
 				<Polyline coordinates={coordinates} {...props} />
