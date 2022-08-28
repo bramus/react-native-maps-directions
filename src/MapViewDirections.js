@@ -307,8 +307,19 @@ class MapViewDirections extends Component {
 			...props
 		} = this.props;
 
+		const borderPolylineProps = {
+			...props,
+			strokeWidth: props.strokeBorderWidth + props.strokeWidth,
+			strokeColor: props.strokeBorderColor,
+		};
+
 		return (
-			<Polyline coordinates={coordinates} {...props} />
+			<>
+				{props.strokeBorderWidth &&
+					<Polyline coordinates={coordinates} {...borderPolylineProps} />
+				}
+				<Polyline coordinates={coordinates} {...props} />
+			</>
 		);
 	}
 
@@ -352,6 +363,9 @@ MapViewDirections.propTypes = {
 	precision: PropTypes.oneOf(['high', 'low']),
 	timePrecision: PropTypes.oneOf(['now', 'none']),
 	channel: PropTypes.string,
+	strokeWidth: PropTypes.number,
+	strokeBorderWidth: PropTypes.number,
+	strokeBorderColor: PropTypes.string,
 };
 
 export default MapViewDirections;

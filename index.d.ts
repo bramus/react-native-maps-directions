@@ -212,6 +212,19 @@ declare module "react-native-maps-directions" {
      */
     strokeColor?: string;
     /**
+     * @number
+     * The stroke border width to use for the path
+     * 0 indicates no border.
+     * Default: 0
+     */
+    strokeBorderWidth?: number;
+    /**
+    * @string
+    * The stroke border color to use for the path.
+    * Default: "#FFF"
+    */
+    strokeBorderColor?: string;
+    /**
      * @Array
      * The stroke colors to use for the path (iOS only).
      * Must be the same length as coordinates.
