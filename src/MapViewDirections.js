@@ -183,14 +183,15 @@ class MapViewDirections extends Component {
 					})
 			);
 		})).then(results => {
-			// Combine all Directions API Request results into one
-			const result = results.reduce((acc, { distance, duration, coordinates, fare, legs, waypointOrder }) => {
+			const result = results.reduce((acc, { distance, duration, coordinates, fare, waypointOrder, legs, sourceAddress, destinationAddress }) => {
 				acc.coordinates = [
 					...acc.coordinates,
 					...coordinates,
 				];
 				acc.distance += distance;
 				acc.duration += duration;
+				acc.sourceAddress = sourceAddress;
+				acc.destinationAddress = destinationAddress;
 				acc.fares = [
 					...acc.fares,
 					fare,
@@ -200,15 +201,21 @@ class MapViewDirections extends Component {
 					...acc.waypointOrder,
 					waypointOrder,
 				];
-
+				acc.steps = [
+					...acc.steps,
+					...steps,
+				];
 				return acc;
 			}, {
 				coordinates: [],
 				distance: 0,
 				duration: 0,
 				fares: [],
+				sourceAddress:'',
+				destinationAddress: '',
 				legs: [],
 				waypointOrder: [],
+				steps:[],
 			});
 
 			// Plot it out and call the onReady callback
@@ -273,6 +280,8 @@ class MapViewDirections extends Component {
 						),
 						fare: route.fare,
 						waypointOrder: route.waypoint_order,
+						sourceAddress: route.legs[0].start_address,
+						destinationAddress: route.legs[0].end_address,
 						legs: route.legs,
 					});
 
