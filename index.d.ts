@@ -1,4 +1,4 @@
-declare module "react-native-maps-directions" {
+declare module 'react-native-maps-directions' {
   // Type definitions for react-native-maps-directions 1.6
   // Project: https://github.com/bramus/react-native-maps-directions
   // Definitions by: Ali Oguzhan Yildiz <https://github.com/alioguzhan>
@@ -6,71 +6,46 @@ declare module "react-native-maps-directions" {
   // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
   // TypeScript Version: 3.3
 
-  import * as React from "react";
+  import * as React from 'react';
 
-  export type MapDirectionsLegs =[
+  export type MapDirectionsLegs = [
     {
-      distance: {
-        text: string,
-        value: number
-      },
-      duration: {
-        text: string,
-        value: number
-      },
-      end_address: string,
-      end_location: {
-        lat: number,
-        lng: number
-      },
-      start_address: string,
-      start_location: {
-        lat: number,
-        lng: number
-      },
-      steps: [{
-        distance: {
-          text: string,
-          value: number
-        },
-        duration: {
-          text: string,
-          value: number
-        },
-        end_location: {
-          lat: number,
-          lng: number
-        },
-        start_location: {
-          lat: number,
-          lng: number
-        },
-        html_instructions: string,
-        polyline: {
-          points: string
-        },
-        travel_mode: string,
-        maneuver: string | undefined
-      }],
-      traffic_speed_entry: [],
-      via_waypoint: [],
-    }]
+      distance: google.maps.Distance;
+      duration: google.maps.Duration;
+      end_address: string;
+      end_location: Pick<google.maps.LatLng, 'lat' | 'lng'>;
+      start_address: string;
+      start_location: Pick<google.maps.LatLng, 'lat' | 'lng'>;
+      steps: [
+        {
+          distance: google.maps.Distance;
+          duration: google.maps.Duration;
+          end_location: Pick<google.maps.LatLng, 'lat' | 'lng'>;
+          start_location: Pick<google.maps.LatLng, 'lat' | 'lng'>;
+          html_instructions: string;
+          polyline: google.maps.DirectionsPolyline;
+          travel_mode: google.maps.TravelMode;
+          maneuver: string | undefined;
+        }
+      ];
+      traffic_speed_entry: any[];
+      via_waypoint: google.maps.LatLng[];
+    }
+  ];
 
   export type MapDirectionsResponse = {
     coordinates: [
       {
-        latitude: number,
-        longitude: number
-      }],
-    distance: number,
-    duration: number,
-    fares: [],
-    legs: MapDirectionsLegs,
-    waypointOrder: [[number]]
-  }
-
-
-
+        latitude: number;
+        longitude: number;
+      }
+    ];
+    distance: number;
+    duration: number;
+    fares: [];
+    legs: MapDirectionsLegs;
+    waypointOrder: [[number]];
+  };
 
   export type MapViewDirectionsOrigin =
     | string
@@ -94,18 +69,16 @@ declare module "react-native-maps-directions" {
       };
 
   export type MapViewDirectionsMode =
-    | "DRIVING"
-    | "BICYCLING"
-    | "TRANSIT"
-    | "WALKING";
+    | 'DRIVING'
+    | 'BICYCLING'
+    | 'TRANSIT'
+    | 'WALKING';
 
-  export type MapViewDirectionsPrecision =
-    | "high"
-    | "low";
+  export type MapDirectionAvoid = 'TOLLS' | 'HIGHWAYS' | 'FERRIES';
 
-  export type MapViewDirectionsTimePrecision =
-      | "now"
-      | "none";
+  export type MapViewDirectionsPrecision = 'high' | 'low';
+
+  export type MapViewDirectionsTimePrecision = 'now' | 'none';
 
   export interface MapViewDirectionsProps {
     /**
@@ -276,6 +249,8 @@ declare module "react-native-maps-directions" {
      * Boolean to allow a polyline to be tappable and use the onPress function.
      */
     tappable?: boolean;
+
+    avoid?: MapDirectionAvoid[];
   }
 
   export default class MapViewDirections extends React.Component<
