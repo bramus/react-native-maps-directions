@@ -117,6 +117,10 @@ declare module "react-native-maps-directions" {
      */
     waypoints?: MapViewDirectionsWaypoints[];
     /**
+     * Avoid type of ways
+     */
+    avoid: string;
+    /**
      * The destination location to start routing to.
      */
     destination?: MapViewDirectionsDestination;
