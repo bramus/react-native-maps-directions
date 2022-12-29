@@ -148,6 +148,7 @@ const MapViewDirections = (props) => {
     props.precision,
     props.splitWaypoints,
     props.avoid,
+    props.optimizeWaypoints,
   ]);
 
   if (!coordinates || coordinates.length) return null;

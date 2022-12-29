@@ -28,7 +28,8 @@ class MapViewDirections extends Component {
       !isEqual(prevProps.mode, this.props.mode) ||
       !isEqual(prevProps.precision, this.props.precision) ||
       !isEqual(prevProps.splitWaypoints, this.props.splitWaypoints) ||
-      !isEqual(prevProps.avoid, this.props.avoid)
+      !isEqual(prevProps.avoid, this.props.avoid) ||
+      !isEqual(prevProps.optimizeWaypoints, this.props.optimizeWaypoints)
     ) {
       if (this.props.resetOnChange === false) {
         this.fetchAndRenderRoute(this.props);
