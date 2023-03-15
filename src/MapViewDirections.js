@@ -310,8 +310,6 @@ class MapViewDirections extends Component {
       }
     }
 
-    console.log(url)
-
     return fetch(url)
       .then((response) => response.json())
       .then((json) => {
