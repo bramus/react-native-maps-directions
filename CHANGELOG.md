@@ -1,5 +1,11 @@
 # `react-native-maps-directions` Changelog
 
+## 1.9.1 – 2023-03-15
+
+- Add `avoidTolls` option;
+- Add `avoidHighways` option;
+- Add `avoidFerries` option;
+
 ## 1.9.0 – 2022-07-27
 
 - Fix: `timePrecision` prop type to `MapViewDirectionsTimePrecision`
@@ -45,7 +51,6 @@
 - Add `region` prop.
 - Return “Duration with traffic” as `duration`
 - Return `fare` in `onReady`
-
 
 ## 1.6.0 - 2018-03-09
 
