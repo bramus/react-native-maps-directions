@@ -4,6 +4,9 @@ import { Polyline } from 'react-native-maps';
 import isEqual from 'lodash.isequal';
 
 const WAYPOINT_LIMIT = 10;
+const BASE_URL_GOOGLE = 'https://maps.googleapis.com/maps/api/directions/json';
+const BASE_URL_GOONG = 'https://rsapi.goong.io/Direction';
+
 
 class MapViewDirections extends Component {
 
@@ -87,7 +90,7 @@ class MapViewDirections extends Component {
 			language = 'en',
 			optimizeWaypoints,
 			splitWaypoints,
-			directionsServiceBaseUrl = 'https://maps.googleapis.com/maps/api/directions/json',
+			directionsServiceBaseUrl = BASE_URL_GOOGLE,
 			region,
 			precision = 'low',
 			timePrecision = 'none',
@@ -231,7 +234,7 @@ class MapViewDirections extends Component {
 
 		// Define the URL to call. Only add default parameters to the URL if it's a string.
 		let url = directionsServiceBaseUrl;
-		if (typeof (directionsServiceBaseUrl) === 'string') {
+		if (typeof (directionsServiceBaseUrl) === 'string' && directionsServiceBaseUrl === BASE_URL_GOOGLE) {
 			url += `?origin=${origin}&waypoints=${waypoints}&destination=${destination}&key=${apikey}&mode=${mode.toLowerCase()}&language=${language}&region=${region}`;
 			if(timePrecision){
 				url+=`&departure_time=${timePrecision}`;
@@ -239,6 +242,10 @@ class MapViewDirections extends Component {
 			if(channel){
 				url+=`&channel=${channel}`;
 			}
+		}
+
+		if (directionsServiceBaseUrl === BASE_URL_GOONG) {
+			url += `?api_key=${apikey}&origin=${origin}&destination=${destination}`;
 		}
 
 		return fetch(url)
